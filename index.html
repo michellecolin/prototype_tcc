@@ -209,9 +209,9 @@
                 var finger = new Fingers(pElement);
                 console.log("one finger", pFingers);
                 console.log(pElement.id);
-                console.log(pLabelElement);   
-                updateImage(pLabelElement);
-                addDiagramElements(pElement.id);
+                console.log(pLabelElement); 
+                addDiagramElements(pElement.id);  
+                updateImage(pLabelElement, pElement.id);               
             });
         };
 
@@ -288,13 +288,14 @@
             }, 2000);
         };
 
-        function updateImage(pLabelElement) {
+        function updateImage(pLabelElement, elId) {
             var originalImg = pLabelElement.currentSrc;
             var selectedImg = originalImg.slice(0,originalImg.length-4) + "_selected.png";
             pLabelElement.src = selectedImg; //Replace image
             clearTimeout(pLabelElement.__timeout__);
             pLabelElement.__timeout__ = setTimeout(function() {
                 pLabelElement.src = originalImg;
+                removeHighlit(elId);
             }, 700);
         };
 
@@ -304,14 +305,19 @@
                 diagramElements[elementId] = 1;
                 var length = Object.keys(diagramElements).length;
                 switch(length) {
-                    case 1: break;
+                    case 1: 
+                            break;
                     case 2: divEl.style.marginLeft = '50px';
+                            divEl.style.zIndex = '1';
                             break;
                     case 3: divEl.style.marginLeft = '100px';
+                            divEl.style.zIndex = '2';
                             break;
                     case 4: divEl.style.marginLeft = '150px';
+                            divEl.style.zIndex = '3';
                             break;
                     case 5: divEl.style.marginLeft = '200px';
+                            divEl.style.zIndex = '4';
                             break;
                 }
             } else {
@@ -319,8 +325,14 @@
             }
             divEl.children[1].innerHTML = diagramElements[elementId];
             divEl.style.display = 'block';
+            divEl.style.backgroundColor = 'yellow';
 
             console.log(diagramElements);
+        };
+
+        function removeHighlit(elementId){
+            var divEl = document.getElementsByClassName("selected-elements " + elementId)[0];
+            divEl.style.backgroundColor = '';
         };
 
         boxE = document.getElementById("testSwipe2");

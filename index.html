@@ -7,6 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
     <META http-equiv="Cache-Control" content="no-cache">
     <META http-equiv="Pragma" content="no-cache">
@@ -39,6 +40,7 @@
             line-height: normal;
             vertical-align: middle;
         }
+
         .toolbox {
             background: #a0b4c5;
             -webkit-box-shadow: -1px 10px 13px -7px rgba(0,21,25,0.71);
@@ -64,6 +66,11 @@
             position: absolute;
             background: #ffffa4;
             display: none;
+            /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f7eb91+0,f7eb94+0,f9f2ac+28,fcf6c4+54,fcf6bd+81 */
+            background: -moz-linear-gradient(left, #f7eb91 0%, #f7eb94 0%, #f9f2ac 28%, #fcf6c4 54%, #fcf6bd 81%); /* FF3.6-15 */
+            background: -webkit-linear-gradient(left, #f7eb91 0%,#f7eb94 0%,#f9f2ac 28%,#fcf6c4 54%,#fcf6bd 81%); /* Chrome10-25,Safari5.1-6 */
+            background: linear-gradient(to right, #f7eb91 0%,#f7eb94 0%,#f9f2ac 28%,#fcf6c4 54%,#fcf6bd 81%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7eb91', endColorstr='#fcf6bd',GradientType=1 ); /* IE6-9 */
         }
 
         .selected-elements > .ammount {
@@ -71,69 +78,98 @@
             bottom: 0;
             padding-bottom: 4px;
             padding-left: 5px;
-            color: red;
+            color: #fff;
             font-weight: bold;
             font-size: 3vmin;
+            margin-bottom: 0.2vmin;
+            margin-left: 0.4vmin;
+            padding-right: 1vmin;
+            background-color: #788c9c;
+            padding-top: 0.5vmin;
+            border-radius: 25px;
         }
 
         .actor {
-            height: 15vmin; 
-            width: 15vmin;
+            height: 12vmin; 
+            width: 10vmin;
         }
 
         .actor > img {
-            height: 12vmin;
-            margin-left: 4.5vmin;
+            height: 8vmin;
+            margin-left: 3vmin;
             margin-top: 1vmin;
         }
 
         .ellipse {
-            height: 15vmin;
-            width: 18.5vmin;
+            height: 12vmin;
+            width: 16vmin;
         }
 
         .ellipse > img {
-            height: 12vmin;
-            margin-top: 1vmin;
+            height: 10vmin;
+            margin-top: 0.5vmin;
+            margin-left: 0.5vmin;
         }
 
         .package {
-            height: 15vmin;
-            width: 20.5vmin;
+            height: 12vmin;
+            width: 17vmin;
         }
 
         .package > img {
-            height: 12vmin;
-            margin-top: 1vmin;
+            height: 9.5vmin;
+            margin-top: 0.5vmin;
             margin-left: 2.5vmin;
         }
 
         .boundary {
-            height: 15vmin;
-            width: 20.5vmin;
+            height: 12vmin;
+            width: 17vmin;
         }
 
         .boundary > img {
-            height: 12vmin;
-            margin-top: 1vmin;
+            height: 9.5vmin;
+            margin-top: 0.5vmin;
             margin-left: 2.5vmin;
         }
 
         .note {
-            height: 15vmin;
-            width: 20.5vmin;
+            height: 12vmin;
+            width: 17vmin;
         }
 
         .note > img {
-            height: 12vmin;
-            margin-top: 1vmin;
+            height: 9.5vmin;
+            margin-top: 0.5vmin;
             margin-left: 2.5vmin;
         }
-        body { -webkit-touch-callout: none !important; }
+
+        /*stop scrolling*/
+        .lock-screen {
+            height: 100%;
+            overflow: hidden;
+            width: 100%;
+            position: fixed;
+            -webkit-touch-callout: none !important; 
+        }
+
+        @media (orientation: portrait) { 
+
+            .item {
+                float: left;
+                width: 15vmin;
+                text-align: right;
+            }
+
+            .toolbox {
+                padding-left: 7vmin;
+            }
+
+        }
         a { -webkit-user-select: none !important; }
     </style>
 </head>
-<body onload="onLoadEvent()">
+<body class="lock-screen" onload="onLoadEvent()">
     <div class="toolbox">
         <div class="item" id="actor"><img class="inner" src="img/actor.png"/></div>
         <div class="item" id="ellipse"><img class="inner" src="img/ellipse.png"></div>
@@ -165,9 +201,9 @@
     </div>
 
      <canvas id="myCanvas" style="background-color:#fff; margin-top:10px" width="2000px" height="2000px"
-        ontouchstart="mouseDownEvent(event.clientX, event.clientY)"
-        ontouchmove="mouseMoveEvent(event.clientX, event.clientY)"
-        ontouchend="mouseUpEvent(event.clientX, event.clientY)"
+        onmousedown="mouseDownEvent(event.clientX, event.clientY)"
+        onmousemove="mouseMoveEvent(event.clientX, event.clientY)"
+        onmouseup="mouseUpEvent(event.clientX, event.clientY)"
         oncontextmenu="return false;">
         <span style="background-color:#ffff88;">The &lt;canvas&gt; element is not supported by this browser.</span>
     </canvas>
@@ -325,14 +361,13 @@
             }
             divEl.children[1].innerHTML = diagramElements[elementId];
             divEl.style.display = 'block';
-            divEl.style.backgroundColor = 'yellow';
-
-            console.log(diagramElements);
+            divEl.children[1].style.backgroundColor = '#ff6a6a';
         };
 
         function removeHighlit(elementId){
             var divEl = document.getElementsByClassName("selected-elements " + elementId)[0];
-            divEl.style.backgroundColor = '';
+            console.log(divEl);
+            divEl.children[1].style.backgroundColor = '';
         };
 
         boxE = document.getElementById("testSwipe2");

@@ -1,6 +1,9 @@
     //
 		// Startup
 		//
+
+		//stop screen rolling down
+		
 		var _isDown, _points, _r, _g, _rc;
 		function onLoadEvent()
 		{
@@ -46,9 +49,8 @@
 		function mouseDownEvent(x, y)
 		{
 			document.onselectstart = function() { return false; } // disable drag-select
-			document.ontouchstart = function() { return false; } // disable drag-select
+			document.onmousedown = function() { return false; } // disable drag-select
 			_isDown = true;
-			console.log(_isDown);
 			x -= _rc.x;
 			y -= _rc.y - getScrollY();
 			if (_points.length > 0)
@@ -70,13 +72,12 @@
 		function mouseUpEvent(x, y)
 		{
 			document.onselectstart = function() { return true; } // enable drag-select
-			document.ontouchstart = function() { return true; } // enable drag-select
+			document.onmousedown = function() { return true; } // enable drag-select
 			if (_isDown)
 			{
 				_isDown = false;
-				console.log(_points);
 				if (_points.length >= 10)
-				{	
+				{
 					var result = _r.Recognize(_points, false);
 					//drawText("Result: " + result.Name + " (" + round(result.Score,2) + ").");
 					alert("Result: " + result.Name + " (" + round(result.Score,2) + ").");

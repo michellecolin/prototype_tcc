@@ -1,92 +1,356 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-
 <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <meta name='apple-touch-fullscreen' content='yes'>
-    <meta name='format-detection' content='telephone=no'>
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="KOK">
-    <script>
-    if (window.devicePixelRatio >1  ){
-        document.write('<meta name="viewport" content="user-scalable=no, width=device-width, height=device-height, initial-scale=0.5, minimum-scale=0.5, maximum-scale=0.5" />');
-    } else {
-        document.write('<meta name="viewport" content="user-scalable=no, width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1, maximum-scale=1" />');
-    }
-    </script>
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
 
-    <title>Gesture Demo</title>
-    <style type="text/css">
-    body {
-        padding: 0px;
-        margin: 0px;
-        border: 0px;
-    }
-    #canvas {
-        margin: 0px;
-    }
-    #toolbar {
-        padding:10px;
-        font-size:24px;
-        line-height: 30px;
-        background: #ffffff;
-        border: 1px solid #000000;
-        position: absolute;
-        top:2px;
-        right:2px;
-    }
-    #toolbar button {
-        display: block;
-        font-size:20px;
-        padding: 5px 5px;
-        margin:10px 5px;
-    }
-    #toolbar button:hover {
-        color:#ff0000;
-    }
-    #toolbar button:active {
-        color:#ff0000;
-    }
+    <META http-equiv="Cache-Control" content="no-cache">
+    <META http-equiv="Pragma" content="no-cache">
+    <META http-equiv="Expires" content="0">
+
+    <title>Action gestures</title>
+    <script src="scripts/fingers.js"></script>
+    <script type="text/javascript" src="scripts/canvas.text.js"></script>
+    <script type="text/javascript" src="scripts/jquery.min.js"></script>
+    <script type="text/javascript" src="scripts/dollar.js"></script>
+    <script type="text/javascript" src="scripts/gestureRecognizer.js"></script>
+
+    <style>
+        html, body {
+            margin: 0;
+            overflow: hidden;
+        }
+        .testBox {
+            display: inline-block;
+            width: 300px; height: 200px;
+            margin: 20px;
+            background-color: black;
+            color: white;
+            text-align: center;
+            line-height: 200px;
+        }
+
+        .innerLabel {
+            display: inline-block;
+            line-height: normal;
+            vertical-align: middle;
+        }
+        .toolbox {
+            background: #a0b4c5;
+            -webkit-box-shadow: -1px 10px 13px -7px rgba(0,21,25,0.71);
+            -moz-box-shadow: -1px 10px 13px -7px rgba(0,21,25,0.71);
+            box-shadow: -1px 10px 13px -7px rgba(0,21,25,0.71);
+            padding-top: 5px;
+            padding-left: 10vmin;
+        }
+
+        .toolbox img {
+            height: 8vmin;
+            padding-top: 2px;
+            padding-bottom:2px;
+        }
+
+        .item {
+            float: left;
+            width: 20vmin;
+            text-align: right;
+        }
+
+        .selected-elements {
+            position: absolute;
+            background: #ffffa4;
+            display: none;
+        }
+
+        .selected-elements > .ammount {
+            position: absolute;
+            bottom: 0;
+            padding-bottom: 4px;
+            padding-left: 5px;
+            color: red;
+            font-weight: bold;
+            font-size: 3vmin;
+        }
+
+        .actor {
+            height: 15vmin; 
+            width: 15vmin;
+        }
+
+        .actor > img {
+            height: 12vmin;
+            margin-left: 4.5vmin;
+            margin-top: 1vmin;
+        }
+
+        .ellipse {
+            height: 15vmin;
+            width: 18.5vmin;
+        }
+
+        .ellipse > img {
+            height: 12vmin;
+            margin-top: 1vmin;
+        }
+
+        .package {
+            height: 15vmin;
+            width: 20.5vmin;
+        }
+
+        .package > img {
+            height: 12vmin;
+            margin-top: 1vmin;
+            margin-left: 2.5vmin;
+        }
+
+        .boundary {
+            height: 15vmin;
+            width: 20.5vmin;
+        }
+
+        .boundary > img {
+            height: 12vmin;
+            margin-top: 1vmin;
+            margin-left: 2.5vmin;
+        }
+
+        .note {
+            height: 15vmin;
+            width: 20.5vmin;
+        }
+
+        .note > img {
+            height: 12vmin;
+            margin-top: 1vmin;
+            margin-left: 2.5vmin;
+        }
+        body { -webkit-touch-callout: none !important; }
+        a { -webkit-user-select: none !important; }
     </style>
-
-    <script src="scripts/Utils.js"></script>
-    <script src="scripts/Polyline.js"></script>
-    <script src="scripts/DollarOne.js"></script>
-    <script src="scripts/DefaultOne.js"></script>
-
-    <script src="scripts/tiny-game.js"></script>
-    <script src="main.js"></script>
-
-    <script type="text/javascript">
-
-    </script>
-
-
 </head>
-
-<body>
-
-    <canvas id="canvas"></canvas>
-
-    <div id="toolbar">
-        <button type="button" onclick="window.location.reload();">Reload</button>
-        <hr>
-        <!-- <button type="button" onclick="saveGesture();">save</button> -->
-        <button type="button" onclick="addGesture();">add <span id="gcount"></span></button>
-        <button type="button" onclick="removeGesture();">remove</button>
-        <hr>
-        <button type="button" onclick="testGesture();">test</button>
-        <hr>
-        <button type="button" onclick="resample();">resample</button>
-        <button type="button" onclick="centroid();">centroid</button>
-        <button type="button" onclick="translateTo();">translate</button>
-        <button type="button" onclick="scale();">scale</button>
-        <button type="button" onclick="rotate();">rotate</button>
-        <div>v1</div>
+<body onload="onLoadEvent()">
+    <div class="toolbox">
+        <div class="item" id="actor"><img class="inner" src="img/actor.png"/></div>
+        <div class="item" id="ellipse"><img class="inner" src="img/ellipse.png"></div>
+        <div class="item" id="package"><img class="inner" src="img/package.png"></div>
+        <div class="item" id="boundary"><img class="inner" src="img/boundary.png"></div>
+        <div class="item" id="note"><img class="inner" src="img/note.png"></div>
+        <div style="clear:both"></div>
     </div>
 
-</body>
+    <div class="selected-elements actor">
+        <img class="inner" src="img/actor.png"/>
+        <div class="ammount">3</div>
+    </div>
+    <div class="selected-elements ellipse">
+        <img class="inner" src="img/ellipse.png"/>
+        <div class="ammount">3</div>
+    </div>
+    <div class="selected-elements package">
+        <img class="inner" src="img/package.png"/>
+        <div class="ammount">3</div>
+    </div>
+    <div class="selected-elements boundary">
+        <img class="inner" src="img/boundary.png"/>
+        <div class="ammount">3</div>
+    </div>
+    <div class="selected-elements note">
+        <img class="inner" src="img/note.png"/>
+        <div class="ammount">3</div>
+    </div>
 
+     <canvas id="myCanvas" style="background-color:#fff; margin-top:10px" width="2000px" height="2000px"
+        ontouchstart="mouseDownEvent(event.clientX, event.clientY)"
+        ontouchmove="mouseMoveEvent(event.clientX, event.clientY)"
+        ontouchend="mouseUpEvent(event.clientX, event.clientY)"
+        oncontextmenu="return false;">
+        <span style="background-color:#ffff88;">The &lt;canvas&gt; element is not supported by this browser.</span>
+    </canvas>
+
+    <div style="margin-top: 1000px">
+        <div id="testSwipe2" class="testBox"><div class="innerLabel">Swipe Me<br/>with 2 fingers</div></div>
+        <div id="testHold1" class="testBox"><div class="innerLabel">Hold Me<br/>with 1 finger</div></div>
+        <div id="testHold2" class="testBox"><div class="innerLabel">Hold Me<br/>with 2 finger</div></div>
+        <div id="testHold3" class="testBox"><div class="innerLabel">Hold Me<br/>with 2 finger</div></div>
+        <div id="testTap1" class="testBox"><div class="innerLabel">Tap me many times<br/>with 1 finger</div></div>
+        <div id="testTap2" class="testBox"><div class="innerLabel">Tap me many times<br/>with 2 finger</div></div>
+    </div>
+
+    <script>
+        var diagramElements = {};
+
+        window.oncontextmenu = function(event) {
+             event.preventDefault();
+             event.stopPropagation();
+             return false;
+        };
+
+        document.body.style.webkitTouchCallout='none';
+        console.log("AQUIIII");
+        function listenSwipe(pElement, pLabelElement) {
+            var finger = new Fingers(pElement);
+            finger.addGesture(Fingers.gesture.Swipe, {
+                nbFingers: 2
+            }).addHandler(function(pEventType, pData, pFingers) {
+                updateLabel(pLabelElement, "Swipe " + pData.direction + "<br/>Velocity: "+ pData.velocity.toFixed(2) + " px/ms");
+            });
+        }
+
+        function listenHoldOneFinger(pElement, pLabelElement) {
+            var finger = new Fingers(pElement);
+            finger.addGesture(Fingers.gesture.Hold, {
+                nbFingers: 1
+            }).addHandler(function(pEventType, pData, pFingers) {
+                var finger = new Fingers(pElement);
+                console.log("one finger", pFingers);
+                console.log(pElement.id);
+                console.log(pLabelElement);   
+                updateImage(pLabelElement);
+                addDiagramElements(pElement.id);
+            });
+        };
+
+        function listenHoldTwoFinger(pElement, pLabelElement) {
+            var finger = new Fingers(pElement);
+            finger.addGesture(Fingers.gesture.Hold, {
+                nbFingers: 2
+            }).addHandler(function(pEventType, pData, pFingers) {
+                console.log("two finger", pFingers);
+                console.log(pElement);
+                console.log(pLabelElement);   
+                updateLabel(pLabelElement, "Hold " + pFingers.length);
+            });
+        };
+
+
+        function listenHoldThreeFinger(pElement, pLabelElement) {
+            var finger = new Fingers(pElement);
+            finger.addGesture(Fingers.gesture.Hold, {
+                nbFingers: 3
+            }).addHandler(function(pEventType, pData, pFingers) {
+                console.log("one finger", pFingers);
+                console.log(pData);
+                updateLabel(pLabelElement, "");
+            });
+        };
+
+
+        function listenHold(pElement, pLabelElement, pNbFingers) {
+            var finger = new Fingers(pElement);
+            finger.addGesture(Fingers.gesture.Hold, {
+                nbFingers: pNbFingers
+            }).addHandler(function(pEventType, pData, pFingers) {
+                console.log("one finger", pFingers);
+                console.log(pData);
+                updateLabel(pLabelElement, "Hold");
+            });
+        };
+
+        function listenTap(pElement, pLabelElement) {
+            var finger = new Fingers(pElement);
+            finger.addGesture(Fingers.gesture.Tap, {
+                nbFingers: 1
+            }).addHandler(function(pEventType, pData, pFingers) {
+                console.log(pData);
+                if (pData.nbTap === 1) {
+                    console.log("ONE TAP");
+                    updateLabel(pLabelElement, "Tap<br/>" + pData.nbTap + "x");
+                }
+            });
+        };
+
+        function listenDoubleTap(pElement, pLabelElement) {
+            var finger = new Fingers(pElement);
+            finger.addGesture(Fingers.gesture.Tap, {
+                nbFingers: 1
+            }).addHandler(function(pEventType, pData, pFingers) {
+                console.log(pData);
+                if (pData.nbTap === 2) {
+                    console.log("DOUBLE TAP");
+                    updateLabel(pLabelElement, "Tap<br/>" + pData.nbTap + "x");
+                }
+            });
+        };
+
+        function updateLabel(pLabelElement, pNewLabel) {
+            clearTimeout(pLabelElement.__timeout__);
+            if(!pLabelElement.__originalLabel__) { pLabelElement.__originalLabel__ = pLabelElement.innerHTML; }
+
+            pLabelElement.innerHTML = pNewLabel;
+
+            pLabelElement.__timeout__ = setTimeout(function() {
+                pLabelElement.innerHTML = pLabelElement.__originalLabel__;
+            }, 2000);
+        };
+
+        function updateImage(pLabelElement) {
+            var originalImg = pLabelElement.currentSrc;
+            var selectedImg = originalImg.slice(0,originalImg.length-4) + "_selected.png";
+            pLabelElement.src = selectedImg; //Replace image
+            clearTimeout(pLabelElement.__timeout__);
+            pLabelElement.__timeout__ = setTimeout(function() {
+                pLabelElement.src = originalImg;
+            }, 700);
+        };
+
+        function addDiagramElements(elementId){
+            var divEl = document.getElementsByClassName("selected-elements " + elementId)[0];
+            if (!diagramElements[elementId]) {
+                diagramElements[elementId] = 1;
+                var length = Object.keys(diagramElements).length;
+                switch(length) {
+                    case 1: break;
+                    case 2: divEl.style.marginLeft = '50px';
+                            break;
+                    case 3: divEl.style.marginLeft = '100px';
+                            break;
+                    case 4: divEl.style.marginLeft = '150px';
+                            break;
+                    case 5: divEl.style.marginLeft = '200px';
+                            break;
+                }
+            } else {
+                diagramElements[elementId]++;
+            }
+            divEl.children[1].innerHTML = diagramElements[elementId];
+            divEl.style.display = 'block';
+
+            console.log(diagramElements);
+        };
+
+        boxE = document.getElementById("testSwipe2");
+        listenSwipe(boxE, boxE.querySelector(".innerLabel"), 2);
+
+        boxE = document.getElementById("testHold1");
+        listenHoldOneFinger(boxE, boxE.querySelector(".innerLabel"));
+
+        boxE = document.getElementById("testHold2");
+        listenHoldTwoFinger(boxE, boxE.querySelector(".innerLabel"));
+
+        boxE = document.getElementById("testHold3");
+        listenHoldThreeFinger(boxE, boxE.querySelector(".innerLabel"));
+
+        boxE = document.getElementById("testTap1");
+        listenTap(boxE, boxE.querySelector(".innerLabel"), 1);
+
+        boxE = document.getElementById("testTap2");
+        listenDoubleTap(boxE, boxE.querySelector(".innerLabel"), 2);
+
+        var toolbox = document.getElementsByClassName("toolbox");
+        console.log(toolbox[0].children);
+
+        Array.from(toolbox[0].children).forEach(function(item) {
+            if (item.id) {
+                var item = document.getElementById(item.id);
+                listenHoldOneFinger(item, item.querySelector(".inner"));
+            }
+        });
+
+    </script> 
+</body>
 </html>

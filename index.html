@@ -17,6 +17,8 @@
     <script src="scripts/fingers.js"></script>
     <script type="text/javascript" src="scripts/canvas.text.js"></script>
     <script type="text/javascript" src="scripts/jquery.min.js"></script>
+    <script src="scripts/diagram.js"></script>
+    <script src="scripts/main.js"></script>
     <script type="text/javascript" src="scripts/dollar.js"></script>
     <script type="text/javascript" src="scripts/gestureRecognizer.js"></script>
 
@@ -153,6 +155,27 @@
             -webkit-touch-callout: none !important; 
         }
 
+        #myCanvas {
+            background-color:#fff; 
+            margin-top:10px
+        }
+
+        .confirm {
+            background-color: rgba(0, 128, 0, 0.31) !important;
+        }
+
+        .cancel {
+            background-color: #ffadad !important;
+        }
+
+        .undo {
+            background-color: #ffffb5 !important;
+        }
+
+        .redo {
+            background-color: #ffffb5 !important;
+        }
+
         @media (orientation: portrait) { 
 
             .item {
@@ -171,11 +194,11 @@
 </head>
 <body class="lock-screen" onload="onLoadEvent()">
     <div class="toolbox">
-        <div class="item" id="actor"><img class="inner" src="img/actor.png"/></div>
-        <div class="item" id="ellipse"><img class="inner" src="img/ellipse.png"></div>
-        <div class="item" id="package"><img class="inner" src="img/package.png"></div>
-        <div class="item" id="boundary"><img class="inner" src="img/boundary.png"></div>
-        <div class="item" id="note"><img class="inner" src="img/note.png"></div>
+        <div class="item" id="actor" data-action="insert"><img class="inner" src="img/actor.png"/></div>
+        <div class="item" id="ellipse" data-action="insert"><img class="inner" src="img/ellipse.png"></div>
+        <div class="item" id="package" data-action="insert"><img class="inner" src="img/package.png"></div>
+        <div class="item" id="boundary" data-action="insert"><img class="inner" src="img/boundary.png"></div>
+        <div class="item" id="note" data-action="insert"><img class="inner" src="img/note.png"></div>
         <div style="clear:both"></div>
     </div>
 
@@ -200,10 +223,7 @@
         <div class="ammount">3</div>
     </div>
 
-     <canvas id="myCanvas" style="background-color:#fff; margin-top:10px" width="2000px" height="2000px"
-        onmousedown="mouseDownEvent(event.clientX, event.clientY)"
-        onmousemove="mouseMoveEvent(event.clientX, event.clientY)"
-        onmouseup="mouseUpEvent(event.clientX, event.clientY)"
+     <canvas id="myCanvas" width="2000px" height="2000px"
         oncontextmenu="return false;">
         <span style="background-color:#ffff88;">The &lt;canvas&gt; element is not supported by this browser.</span>
     </canvas>
@@ -218,7 +238,7 @@
     </div>
 
     <script>
-        var diagramElements = {};
+        var elementsToBeAdded = {};
 
         window.oncontextmenu = function(event) {
              event.preventDefault();
@@ -227,7 +247,6 @@
         };
 
         document.body.style.webkitTouchCallout='none';
-        console.log("AQUIIII");
         function listenSwipe(pElement, pLabelElement) {
             var finger = new Fingers(pElement);
             finger.addGesture(Fingers.gesture.Swipe, {
@@ -242,12 +261,11 @@
             finger.addGesture(Fingers.gesture.Hold, {
                 nbFingers: 1
             }).addHandler(function(pEventType, pData, pFingers) {
-                var finger = new Fingers(pElement);
-                console.log("one finger", pFingers);
-                console.log(pElement.id);
-                console.log(pLabelElement); 
-                addDiagramElements(pElement.id);  
-                updateImage(pLabelElement, pElement.id);               
+                if (pElement.dataset.action === "insert") {
+                    Diagram.actionStarted("insert", elementsToBeAdded);
+                    addDiagramElements(pElement.id);  
+                    updateImage(pLabelElement, pElement.id); 
+                }              
             });
         };
 
@@ -256,9 +274,6 @@
             finger.addGesture(Fingers.gesture.Hold, {
                 nbFingers: 2
             }).addHandler(function(pEventType, pData, pFingers) {
-                console.log("two finger", pFingers);
-                console.log(pElement);
-                console.log(pLabelElement);   
                 updateLabel(pLabelElement, "Hold " + pFingers.length);
             });
         };
@@ -269,8 +284,6 @@
             finger.addGesture(Fingers.gesture.Hold, {
                 nbFingers: 3
             }).addHandler(function(pEventType, pData, pFingers) {
-                console.log("one finger", pFingers);
-                console.log(pData);
                 updateLabel(pLabelElement, "");
             });
         };
@@ -281,8 +294,6 @@
             finger.addGesture(Fingers.gesture.Hold, {
                 nbFingers: pNbFingers
             }).addHandler(function(pEventType, pData, pFingers) {
-                console.log("one finger", pFingers);
-                console.log(pData);
                 updateLabel(pLabelElement, "Hold");
             });
         };
@@ -292,9 +303,7 @@
             finger.addGesture(Fingers.gesture.Tap, {
                 nbFingers: 1
             }).addHandler(function(pEventType, pData, pFingers) {
-                console.log(pData);
                 if (pData.nbTap === 1) {
-                    console.log("ONE TAP");
                     updateLabel(pLabelElement, "Tap<br/>" + pData.nbTap + "x");
                 }
             });
@@ -305,9 +314,7 @@
             finger.addGesture(Fingers.gesture.Tap, {
                 nbFingers: 1
             }).addHandler(function(pEventType, pData, pFingers) {
-                console.log(pData);
                 if (pData.nbTap === 2) {
-                    console.log("DOUBLE TAP");
                     updateLabel(pLabelElement, "Tap<br/>" + pData.nbTap + "x");
                 }
             });
@@ -316,9 +323,7 @@
         function updateLabel(pLabelElement, pNewLabel) {
             clearTimeout(pLabelElement.__timeout__);
             if(!pLabelElement.__originalLabel__) { pLabelElement.__originalLabel__ = pLabelElement.innerHTML; }
-
             pLabelElement.innerHTML = pNewLabel;
-
             pLabelElement.__timeout__ = setTimeout(function() {
                 pLabelElement.innerHTML = pLabelElement.__originalLabel__;
             }, 2000);
@@ -337,9 +342,9 @@
 
         function addDiagramElements(elementId){
             var divEl = document.getElementsByClassName("selected-elements " + elementId)[0];
-            if (!diagramElements[elementId]) {
-                diagramElements[elementId] = 1;
-                var length = Object.keys(diagramElements).length;
+            if (!elementsToBeAdded[elementId]) {
+                elementsToBeAdded[elementId] = 1;
+                var length = Object.keys(elementsToBeAdded).length;
                 switch(length) {
                     case 1: 
                             break;
@@ -357,16 +362,15 @@
                             break;
                 }
             } else {
-                diagramElements[elementId]++;
+                elementsToBeAdded[elementId]++;
             }
-            divEl.children[1].innerHTML = diagramElements[elementId];
+            divEl.children[1].innerHTML = elementsToBeAdded[elementId];
             divEl.style.display = 'block';
             divEl.children[1].style.backgroundColor = '#ff6a6a';
         };
 
         function removeHighlit(elementId){
             var divEl = document.getElementsByClassName("selected-elements " + elementId)[0];
-            console.log(divEl);
             divEl.children[1].style.backgroundColor = '';
         };
 

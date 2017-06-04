@@ -15,8 +15,7 @@
 
 			var canvas = document.getElementById('myCanvas');
 			_g = canvas.getContext('2d');
-			
-			_g.fillStyle = "rgb(0,0,225)";
+			_g.fillStyle = "rgba(0, 0, 200, 0.5)";
 			_g.strokeStyle = "rgb(0,0,225)";
 			_g.lineWidth = 3;
 			_g.font = "16px Arial";
@@ -103,16 +102,10 @@
 				}
 				else // fewer than 10 points were inputted
 				{
-					drawText("Too few points made. Please try again.");
+					showErrorModal("Too few points made. Please try again.");
+        	_g.clearRect(0, 0, _rc.width, _rc.height);
 				}
 			}
-		}
-
-		function drawText(str) {
-			_g.fillStyle = "rgb(255,255,136)";
-			_g.fillRect(0, 0, _rc.width, 20);
-			_g.fillStyle = "rgb(0,0,255)";
-			_g.fillText(str, 1, 14);
 		}
 
 		function drawConnectedPoint(from, to) {
@@ -132,35 +125,22 @@
 			if (score > 0.85) { //correct gesture
 
 				switch (action) {
-					case "check": Diagram.confirmAction();
-												break;
-					case "undo": 	Diagram.undoAction();
-												break;
-					case "redo": 	Diagram.redoAction();
-												break;
-					case "cancel": 	Diagram.cancelAction();	
-													break;
+					case "check": 
+						Diagram.confirmAction();
+						break;
+					case "undo": 	
+						Diagram.undoAction();
+						break;
+					case "redo": 
+						Diagram.redoAction();
+						break;
+					case "cancel": 	
+						Diagram.cancelAction();	
+						break;
 				}
 
 			} else {
-				alert("gesture not recognized");
+				showErrorModal("Gesture not recognized");
+        _g.clearRect(0, 0, _rc.width, _rc.height);
 			}
-
-
 		};
-
-		function confirmAction() {
-			console.log("confirm action");
-		}
-
-		function undoAction() {
-			console.log("undo action");
-		};
-
-		function redoAction() {
-			console.log("redo action");
-		}
-
-		function cancelAction() {
-				console.log("cancel action");
-		}

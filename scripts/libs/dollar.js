@@ -139,8 +139,6 @@ function DollarRecognizer() // constructor
 		points = TranslateTo(points, Origin);
 		var vector = Vectorize(points); // for Protractor
 
-		console.log(this.Unistrokes);
-		
 		var b = +Infinity;
 		var u = -1;
 		for (var i = 0; i < this.Unistrokes.length; i++) // for each unistroke
@@ -150,7 +148,6 @@ function DollarRecognizer() // constructor
 				d = OptimalCosineDistance(this.Unistrokes[i].Vector, vector);
 			else // Golden Section Search (original $1)
 				d = DistanceAtBestAngle(points, this.Unistrokes[i], -AngleRange, +AngleRange, AnglePrecision);
-				console.log("distance");
 			if (d < b) {
 				b = d; // best (least) distance
 				u = i; // unistroke

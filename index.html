@@ -9,6 +9,9 @@
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
+    <link href="css/canvas-elements.css" rel="stylesheet" type="text/css" />
+    <link href="css/general.css" rel="stylesheet" type="text/css" />
+
     <META http-equiv="Cache-Control" content="no-cache">
     <META http-equiv="Pragma" content="no-cache">
     <META http-equiv="Expires" content="0">
@@ -19,181 +22,10 @@
     <script type="text/javascript" src="scripts/libs/jquery.min.js"></script>
     <script type="text/javascript" src="scripts/libs/dollar.js"></script>
     <script src="scripts/diagram.js"></script>
-    <script src="scripts/main.js"></script>
+    <script src="scripts/canvas-logic.js"></script>
     <script type="text/javascript" src="scripts/gestureRecognizer.js"></script>
-
-    <style>
-        html, body {
-            margin: 0;
-            overflow: hidden;
-        }
-
-        .testBox {
-            display: inline-block;
-            width: 300px; height: 200px;
-            margin: 20px;
-            background-color: black;
-            color: white;
-            text-align: center;
-            line-height: 200px;
-        }
-
-        .innerLabel {
-            display: inline-block;
-            line-height: normal;
-            vertical-align: middle;
-        }
-
-        .toolbox {
-            background: #a0b4c5;
-            -webkit-box-shadow: -1px 10px 13px -7px rgba(0,21,25,0.71);
-            -moz-box-shadow: -1px 10px 13px -7px rgba(0,21,25,0.71);
-            box-shadow: -1px 10px 13px -7px rgba(0,21,25,0.71);
-            padding-top: 5px;
-            padding-left: 10vmin;
-        }
-
-        .toolbox img {
-            height: 8vmin;
-            padding-top: 2px;
-            padding-bottom:2px;
-        }
-
-        .item {
-            float: left;
-            width: 20vmin;
-            text-align: right;
-        }
-
-        .selected-elements {
-            position: absolute;
-            background: #ffffa4;
-            display: none;
-            /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f7eb91+0,f7eb94+0,f9f2ac+28,fcf6c4+54,fcf6bd+81 */
-            background: -moz-linear-gradient(left, #f7eb91 0%, #f7eb94 0%, #f9f2ac 28%, #fcf6c4 54%, #fcf6bd 81%); /* FF3.6-15 */
-            background: -webkit-linear-gradient(left, #f7eb91 0%,#f7eb94 0%,#f9f2ac 28%,#fcf6c4 54%,#fcf6bd 81%); /* Chrome10-25,Safari5.1-6 */
-            background: linear-gradient(to right, #f7eb91 0%,#f7eb94 0%,#f9f2ac 28%,#fcf6c4 54%,#fcf6bd 81%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7eb91', endColorstr='#fcf6bd',GradientType=1 ); /* IE6-9 */
-        }
-
-        .selected-elements > .ammount {
-            position: absolute;
-            bottom: 0;
-            padding-bottom: 4px;
-            padding-left: 5px;
-            color: #fff;
-            font-weight: bold;
-            font-size: 3vmin;
-            margin-bottom: 0.2vmin;
-            margin-left: 0.4vmin;
-            padding-right: 1vmin;
-            background-color: #788c9c;
-            padding-top: 0.5vmin;
-            border-radius: 25px;
-        }
-
-        .actor {
-            height: 12vmin; 
-            width: 10vmin;
-        }
-
-        .actor > img {
-            height: 8vmin;
-            margin-left: 3vmin;
-            margin-top: 1vmin;
-        }
-
-        .ellipse {
-            height: 12vmin;
-            width: 16vmin;
-        }
-
-        .ellipse > img {
-            height: 10vmin;
-            margin-top: 0.5vmin;
-            margin-left: 0.5vmin;
-        }
-
-        .package {
-            height: 12vmin;
-            width: 17vmin;
-        }
-
-        .package > img {
-            height: 9.5vmin;
-            margin-top: 0.5vmin;
-            margin-left: 2.5vmin;
-        }
-
-        .boundary {
-            height: 12vmin;
-            width: 17vmin;
-        }
-
-        .boundary > img {
-            height: 9.5vmin;
-            margin-top: 0.5vmin;
-            margin-left: 2.5vmin;
-        }
-
-        .note {
-            height: 12vmin;
-            width: 17vmin;
-        }
-
-        .note > img {
-            height: 9.5vmin;
-            margin-top: 0.5vmin;
-            margin-left: 2.5vmin;
-        }
-
-        /*stop scrolling*/
-        .lock-screen {
-            height: 100%;
-            overflow: hidden;
-            width: 100%;
-            position: fixed;
-            -webkit-touch-callout: none !important; 
-        }
-
-        #myCanvas {
-            background-color:#fff; 
-            margin-top:10px
-        }
-
-        .confirm {
-            background-color: rgba(0, 128, 0, 0.31) !important;
-        }
-
-        .cancel {
-            background-color: #ffadad !important;
-        }
-
-        .undo {
-            background-color: #ffffb5 !important;
-        }
-
-        .redo {
-            background-color: #ffffb5 !important;
-        }
-
-        @media (orientation: portrait) { 
-
-            .item {
-                float: left;
-                width: 15vmin;
-                text-align: right;
-            }
-
-            .toolbox {
-                padding-left: 7vmin;
-            }
-
-        }
-        a { -webkit-user-select: none !important; }
-    </style>
 </head>
-<body class="lock-screen" onload="onLoadEvent()">
+<body class="lock-screen" onload="onLoadEvent()"> <!-- start gesture recognition -->
     <div class="toolbox">
         <div class="item" id="actor" data-action="insert"><img class="inner" src="img/actor.png"/></div>
         <div class="item" id="ellipse" data-action="insert"><img class="inner" src="img/ellipse.png"></div>
@@ -203,208 +35,232 @@
         <div style="clear:both"></div>
     </div>
 
-    <div class="selected-elements actor">
-        <img class="inner" src="img/actor.png"/>
-        <div class="ammount">3</div>
+    <div class="modal">
+        <div class="error">This axtion is not</div>
     </div>
-    <div class="selected-elements ellipse">
-        <img class="inner" src="img/ellipse.png"/>
-        <div class="ammount">3</div>
-    </div>
-    <div class="selected-elements package">
-        <img class="inner" src="img/package.png"/>
-        <div class="ammount">3</div>
-    </div>
-    <div class="selected-elements boundary">
-        <img class="inner" src="img/boundary.png"/>
-        <div class="ammount">3</div>
-    </div>
-    <div class="selected-elements note">
-        <img class="inner" src="img/note.png"/>
-        <div class="ammount">3</div>
+
+    <div class="hold-inserted-elements">
+        <div class="selected-elements actor slideLeft">
+            <img class="inner" src="img/actor.png"/>
+            <div class="ammount">3</div>
+        </div>
+        <div class="selected-elements ellipse slideLeft">
+            <img class="inner" src="img/ellipse.png"/>
+            <div class="ammount">3</div>
+        </div>
+        <div class="selected-elements package slideLeft">
+            <img class="inner" src="img/package.png"/>
+            <div class="ammount">3</div>
+        </div>
+        <div class="selected-elements boundary slideLeft">
+            <img class="inner" src="img/boundary.png"/>
+            <div class="ammount">3</div>
+        </div>
+        <div class="selected-elements note slideLeft">
+            <img class="inner" src="img/note.png"/>
+            <div class="ammount">3</div>
+        </div>
     </div>
 
     <canvas id="myCanvas" width="2000px" height="2000px"
         oncontextmenu="return false;">
         <span style="background-color:#ffff88;">The &lt;canvas&gt; element is not supported by this browser.</span>
     </canvas>
-    <div id="paper"></div>
 
-    <div style="margin-top: 1000px">
-        <div id="testSwipe2" class="testBox"><div class="innerLabel">Swipe Me<br/>with 2 fingers</div></div>
-        <div id="testHold1" class="testBox"><div class="innerLabel">Hold Me<br/>with 1 finger</div></div>
-        <div id="testHold2" class="testBox"><div class="innerLabel">Hold Me<br/>with 2 finger</div></div>
-        <div id="testHold3" class="testBox"><div class="innerLabel">Hold Me<br/>with 2 finger</div></div>
-        <div id="testTap1" class="testBox"><div class="innerLabel">Tap me many times<br/>with 1 finger</div></div>
-        <div id="testTap2" class="testBox"><div class="innerLabel">Tap me many times<br/>with 2 finger</div></div>
-    </div>
+<script>
+    var elementsToBeAdded = {};
+    document.body.style.webkitTouchCallout='none';
 
-    <script>
-        var elementsToBeAdded = {};
+    window.oncontextmenu = function(event) {
+         event.preventDefault();
+         event.stopPropagation();
+         return false;
+    };
+    
+    function listenSwipe(pElement, pLabelElement) {
+        var finger = new Fingers(pElement);
+        finger.addGesture(Fingers.gesture.Swipe, {
+            nbFingers: 2
+        }).addHandler(function(pEventType, pData, pFingers) {
+            updateLabel(pLabelElement, "Swipe " + pData.direction + "<br/>Velocity: "+ pData.velocity.toFixed(2) + " px/ms");
+        });
+    }
 
-        window.oncontextmenu = function(event) {
-             event.preventDefault();
-             event.stopPropagation();
-             return false;
-        };
+    function listenHoldOneFinger(pElement, pLabelElement) {
+        var finger = new Fingers(pElement);
+        finger.addGesture(Fingers.gesture.Hold, {
+            nbFingers: 1
+        }).addHandler(function(pEventType, pData, pFingers) {
+            if (pElement.dataset.action === "insert") {
+                Diagram.actionStarted("insert", elementsToBeAdded);
+                addDiagramElements(pElement.id);  
+                updateImage(pLabelElement, pElement.id); 
+            }              
+        });
+    };
 
-        document.body.style.webkitTouchCallout='none';
-        function listenSwipe(pElement, pLabelElement) {
-            var finger = new Fingers(pElement);
-            finger.addGesture(Fingers.gesture.Swipe, {
-                nbFingers: 2
-            }).addHandler(function(pEventType, pData, pFingers) {
-                updateLabel(pLabelElement, "Swipe " + pData.direction + "<br/>Velocity: "+ pData.velocity.toFixed(2) + " px/ms");
-            });
-        }
-
-        function listenHoldOneFinger(pElement, pLabelElement) {
-            var finger = new Fingers(pElement);
-            finger.addGesture(Fingers.gesture.Hold, {
-                nbFingers: 1
-            }).addHandler(function(pEventType, pData, pFingers) {
-                if (pElement.dataset.action === "insert") {
-                    Diagram.actionStarted("insert", elementsToBeAdded);
-                    addDiagramElements(pElement.id);  
-                    updateImage(pLabelElement, pElement.id); 
-                }              
-            });
-        };
-
-        function listenHoldTwoFinger(pElement, pLabelElement) {
-            var finger = new Fingers(pElement);
-            finger.addGesture(Fingers.gesture.Hold, {
-                nbFingers: 2
-            }).addHandler(function(pEventType, pData, pFingers) {
-                updateLabel(pLabelElement, "Hold " + pFingers.length);
-            });
-        };
+    function listenHoldTwoFinger(pElement, pLabelElement) {
+        var finger = new Fingers(pElement);
+        finger.addGesture(Fingers.gesture.Hold, {
+            nbFingers: 2
+        }).addHandler(function(pEventType, pData, pFingers) {
+            updateLabel(pLabelElement, "Hold " + pFingers.length);
+        });
+    };
 
 
-        function listenHoldThreeFinger(pElement, pLabelElement) {
-            var finger = new Fingers(pElement);
-            finger.addGesture(Fingers.gesture.Hold, {
-                nbFingers: 3
-            }).addHandler(function(pEventType, pData, pFingers) {
-                updateLabel(pLabelElement, "");
-            });
-        };
+    function listenHoldThreeFinger(pElement, pLabelElement) {
+        var finger = new Fingers(pElement);
+        finger.addGesture(Fingers.gesture.Hold, {
+            nbFingers: 3
+        }).addHandler(function(pEventType, pData, pFingers) {
+            updateLabel(pLabelElement, "");
+        });
+    };
 
 
-        function listenHold(pElement, pLabelElement, pNbFingers) {
-            var finger = new Fingers(pElement);
-            finger.addGesture(Fingers.gesture.Hold, {
-                nbFingers: pNbFingers
-            }).addHandler(function(pEventType, pData, pFingers) {
-                updateLabel(pLabelElement, "Hold");
-            });
-        };
+    function listenHold(pElement, pLabelElement, pNbFingers) {
+        var finger = new Fingers(pElement);
+        finger.addGesture(Fingers.gesture.Hold, {
+            nbFingers: pNbFingers
+        }).addHandler(function(pEventType, pData, pFingers) {
+            updateLabel(pLabelElement, "Hold");
+        });
+    };
 
-        function listenTap(pElement, pLabelElement) {
-            var finger = new Fingers(pElement);
-            finger.addGesture(Fingers.gesture.Tap, {
-                nbFingers: 1
-            }).addHandler(function(pEventType, pData, pFingers) {
-                if (pData.nbTap === 1) {
-                    updateLabel(pLabelElement, "Tap<br/>" + pData.nbTap + "x");
-                }
-            });
-        };
-
-        function listenDoubleTap(pElement, pLabelElement) {
-            var finger = new Fingers(pElement);
-            finger.addGesture(Fingers.gesture.Tap, {
-                nbFingers: 1
-            }).addHandler(function(pEventType, pData, pFingers) {
-                if (pData.nbTap === 2) {
-                    updateLabel(pLabelElement, "Tap<br/>" + pData.nbTap + "x");
-                }
-            });
-        };
-
-        function updateLabel(pLabelElement, pNewLabel) {
-            clearTimeout(pLabelElement.__timeout__);
-            if(!pLabelElement.__originalLabel__) { pLabelElement.__originalLabel__ = pLabelElement.innerHTML; }
-            pLabelElement.innerHTML = pNewLabel;
-            pLabelElement.__timeout__ = setTimeout(function() {
-                pLabelElement.innerHTML = pLabelElement.__originalLabel__;
-            }, 2000);
-        };
-
-        function updateImage(pLabelElement, elId) {
-            var originalImg = pLabelElement.currentSrc;
-            var selectedImg = originalImg.slice(0,originalImg.length-4) + "_selected.png";
-            pLabelElement.src = selectedImg; //Replace image
-            clearTimeout(pLabelElement.__timeout__);
-            pLabelElement.__timeout__ = setTimeout(function() {
-                pLabelElement.src = originalImg;
-                removeHighlit(elId);
-            }, 700);
-        };
-
-        function addDiagramElements(elementId){
-            var divEl = document.getElementsByClassName("selected-elements " + elementId)[0];
-            if (!elementsToBeAdded[elementId]) {
-                elementsToBeAdded[elementId] = 1;
-                var length = Object.keys(elementsToBeAdded).length;
-                switch(length) {
-                    case 1: 
-                            break;
-                    case 2: divEl.style.marginLeft = '50px';
-                            divEl.style.zIndex = '1';
-                            break;
-                    case 3: divEl.style.marginLeft = '100px';
-                            divEl.style.zIndex = '2';
-                            break;
-                    case 4: divEl.style.marginLeft = '150px';
-                            divEl.style.zIndex = '3';
-                            break;
-                    case 5: divEl.style.marginLeft = '200px';
-                            divEl.style.zIndex = '4';
-                            break;
-                }
-            } else {
-                elementsToBeAdded[elementId]++;
-            }
-            divEl.children[1].innerHTML = elementsToBeAdded[elementId];
-            divEl.style.display = 'block';
-            divEl.children[1].style.backgroundColor = '#ff6a6a';
-        };
-
-        function removeHighlit(elementId){
-            var divEl = document.getElementsByClassName("selected-elements " + elementId)[0];
-            divEl.children[1].style.backgroundColor = '';
-        };
-
-        boxE = document.getElementById("testSwipe2");
-        listenSwipe(boxE, boxE.querySelector(".innerLabel"), 2);
-
-        boxE = document.getElementById("testHold1");
-        listenHoldOneFinger(boxE, boxE.querySelector(".innerLabel"));
-
-        boxE = document.getElementById("testHold2");
-        listenHoldTwoFinger(boxE, boxE.querySelector(".innerLabel"));
-
-        boxE = document.getElementById("testHold3");
-        listenHoldThreeFinger(boxE, boxE.querySelector(".innerLabel"));
-
-        boxE = document.getElementById("testTap1");
-        listenTap(boxE, boxE.querySelector(".innerLabel"), 1);
-
-        boxE = document.getElementById("testTap2");
-        listenDoubleTap(boxE, boxE.querySelector(".innerLabel"), 2);
-
-        var toolbox = document.getElementsByClassName("toolbox");
-        console.log(toolbox[0].children);
-
-        Array.from(toolbox[0].children).forEach(function(item) {
-            if (item.id) {
-                var item = document.getElementById(item.id);
-                listenHoldOneFinger(item, item.querySelector(".inner"));
+    function listenTap(pElement, pLabelElement) {
+        var finger = new Fingers(pElement);
+        finger.addGesture(Fingers.gesture.Tap, {
+            nbFingers: 1
+        }).addHandler(function(pEventType, pData, pFingers) {
+            if (pData.nbTap === 1) {
+                updateLabel(pLabelElement, "Tap<br/>" + pData.nbTap + "x");
             }
         });
+    };
 
-    </script> 
+    function listenDoubleTap(pElement, pLabelElement) {
+        var finger = new Fingers(pElement);
+        finger.addGesture(Fingers.gesture.Tap, {
+            nbFingers: 1
+        }).addHandler(function(pEventType, pData, pFingers) {
+            if (pData.nbTap === 2) {
+                updateLabel(pLabelElement, "Tap<br/>" + pData.nbTap + "x");
+            }
+        });
+    };
+
+    function updateLabel(pLabelElement, pNewLabel) {
+        clearTimeout(pLabelElement.__timeout__);
+        if(!pLabelElement.__originalLabel__) { pLabelElement.__originalLabel__ = pLabelElement.innerHTML; }
+        pLabelElement.innerHTML = pNewLabel;
+        pLabelElement.__timeout__ = setTimeout(function() {
+            pLabelElement.innerHTML = pLabelElement.__originalLabel__;
+        }, 2000);
+    };
+
+    function updateImage(pLabelElement, elId) {
+        var originalImg = pLabelElement.currentSrc;
+        var selectedImg = originalImg.slice(0,originalImg.length-4) + "_selected.png";
+        pLabelElement.src = selectedImg; //Replace image
+        clearTimeout(pLabelElement.__timeout__);
+        pLabelElement.__timeout__ = setTimeout(function() {
+            pLabelElement.src = originalImg;
+            removeHighlit(elId);
+        }, 700);
+    };
+
+    function addDiagramElements(elementId) {
+        var divEl = document.getElementsByClassName("hold-inserted-elements")[0];
+        divEl.style.display = 'block';
+        var divEl = document.getElementsByClassName("selected-elements " + elementId)[0];
+        
+        if (!elementsToBeAdded[elementId]) {
+            elementsToBeAdded[elementId] = 1;
+            var length = Object.keys(elementsToBeAdded).length;
+            switch(length) {
+                case 1: 
+                        break;
+                case 2: divEl.style.marginLeft = '50px';
+                        divEl.style.zIndex = '1';
+                        break;
+                case 3: divEl.style.marginLeft = '100px';
+                        divEl.style.zIndex = '2';
+                        break;
+                case 4: divEl.style.marginLeft = '150px';
+                        divEl.style.zIndex = '3';
+                        break;
+                case 5: divEl.style.marginLeft = '200px';
+                        divEl.style.zIndex = '4';
+                        break;
+            }
+        } else {
+            elementsToBeAdded[elementId]++;
+            divEl.className += " pulse";
+        }
+
+        divEl.children[1].innerHTML = elementsToBeAdded[elementId];
+        divEl.style.display = 'block';
+        divEl.children[1].style.backgroundColor = '#ff6a6a';
+        
+        var classes = divEl.className;
+        if (classes.indexOf("pulse") !== -1) { //animation has already run one time
+            //make it run again
+            var elm = divEl
+            var newone = elm.cloneNode(true);
+            elm.parentNode.replaceChild(newone, elm);
+        } 
+    };
+
+    function removeHighlit(elementId) {
+        var divEl = document.getElementsByClassName("selected-elements " + elementId)[0];
+        divEl.children[1].style.backgroundColor = '';
+    };
+
+    function cancelActionInsertElements() {
+        var divEl = document.getElementsByClassName("hold-inserted-elements")[0];
+        divEl.style.display = 'none';
+        //clean child elements
+        Array.from(divEl.children).forEach(function(el){
+            el.style = '';
+            el.style.display = 'none';
+        });   
+        resetElementsToBeAdded()         
+    };
+
+    function removeInsertElementsPanel() {
+        var divEl = document.getElementsByClassName("hold-inserted-elements")[0];
+        divEl.style.display = 'none';
+        //clean child elements
+        Array.from(divEl.children).forEach(function(el){
+            el.style = '';
+            el.style.display = 'none';
+        });   
+    };
+
+    function resetElementsToBeAdded() {
+        elementsToBeAdded = {}; 
+    }
+
+    function showErrorModal(msg) {
+        $('.modal').css('display', 'table');
+        $('.error').html(msg);
+
+        setTimeout(function(){
+           $('.modal').hide(); 
+        },2000);
+    }
+
+    var toolbox = document.getElementsByClassName("toolbox");
+
+    Array.from(toolbox[0].children).forEach(function(item) {
+        if (item.id) {
+            var item = document.getElementById(item.id);
+            listenHoldOneFinger(item, item.querySelector(".inner"));
+        }
+    });
+
+</script> 
 
 </body>
 </html>

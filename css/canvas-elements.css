@@ -1,0 +1,92 @@
+.actor-box {
+    position: absolute;
+    text-align: center;
+    width: 150px; /*actor*/
+    margin-top: -2000px;
+}
+
+.actor-box > img{
+    width: 60px; /*actor*/
+}
+
+.actor-el-name {
+    color: black !important;
+    text-align: center;
+    width: 150px; /*actor*/
+}
+
+.ellipse-box {
+    position: absolute;
+    text-align: center;
+    width: 150px;
+    margin-top: -2000px;
+}
+
+.ellipse-box > img {
+    width: 200px;
+}
+
+.ellipse-el-name {
+    color: black;
+    text-align: center;
+    width: 150px;
+    margin-top: -105px;
+    margin-left: 25px;
+}
+
+.package-box {
+    position: absolute;
+    text-align: center;
+    width: 150px;
+    margin-top: -2000px;
+}
+
+.package-box > img {
+    width: 200px;
+}
+
+.package-el-name {
+    color: black;
+    text-align: center;
+    width: 165px;
+    margin-left: 17px;
+    margin-top: -90px;
+}
+
+.boundary-box {
+    position: absolute;
+    text-align: center;
+    width: 150px;
+    margin-top: -2000px;
+}
+
+.boundary-box > img {
+    width: 200px;
+}
+
+.boundary-el-name {
+    color: black;
+    text-align: center;
+    width: 165px;
+    margin-left: 17px;
+    margin-top: -100px;
+}
+
+.note-box {
+    position: absolute;
+    text-align: center;
+    width: 150px;
+    margin-top: -2000px;
+}
+
+.note-box > img {
+    width: 200px;
+}
+
+.note-el-name {
+    color: black;
+    text-align: center;
+    width: 150px;
+    margin-left: 17px;
+    margin-top: -120px;
+}

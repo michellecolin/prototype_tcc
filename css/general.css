@@ -1,0 +1,292 @@
+html, body {
+    margin: 0;
+    overflow: hidden;
+}
+
+.modal {
+    position: absolute;
+    right: 0;
+    display: none;
+    top: 10vmin;
+    z-index: 200;
+    background-color: #eb8282;
+    height: 10%;
+    width: 40%;
+    -webkit-box-shadow: -2px 3px 5px 0px rgba(100, 100, 100, 0.95);
+    -moz-box-shadow: -2px 3px 5px 0px rgba(100, 100, 100, 0.95);
+    box-shadow: -2px 3px 5px 0px rgba(100, 100, 100, 0.95);
+}
+
+.modal > .error {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    color: #fff;
+    font-weight: bold;
+    font-size: 3vmin;
+}
+
+.testBox {
+    display: inline-block;
+    width: 300px; height: 200px;
+    margin: 20px;
+    background-color: black;
+    color: white;
+    text-align: center;
+    line-height: 200px;
+}
+
+.innerLabel {
+    display: inline-block;
+    line-height: normal;
+    vertical-align: middle;
+}
+
+.toolbox {
+    background: #a0b4c5;
+    -webkit-box-shadow: -1px 10px 13px -7px rgba(0,21,25,0.71);
+    -moz-box-shadow: -1px 10px 13px -7px rgba(0,21,25,0.71);
+    box-shadow: -1px 10px 13px -7px rgba(0,21,25,0.71);
+    padding-top: 5px;
+    padding-left: 10vmin;
+}
+
+.toolbox img {
+    height: 8vmin;
+    padding-top: 2px;
+    padding-bottom:2px;
+}
+
+.item {
+    float: left;
+    width: 20vmin;
+    text-align: right;
+}
+
+.selected-elements {
+    position: absolute;
+    background: #ffffa4;
+    display: none;
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f7eb91+0,f7eb94+0,f9f2ac+28,fcf6c4+54,fcf6bd+81 */
+    background: -moz-linear-gradient(left, #f7eb91 0%, #f7eb94 0%, #f9f2ac 28%, #fcf6c4 54%, #fcf6bd 81%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(left, #f7eb91 0%,#f7eb94 0%,#f9f2ac 28%,#fcf6c4 54%,#fcf6bd 81%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right, #f7eb91 0%,#f7eb94 0%,#f9f2ac 28%,#fcf6c4 54%,#fcf6bd 81%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7eb91', endColorstr='#fcf6bd',GradientType=1 ); /* IE6-9 */
+}
+
+.hold-inserted-elements {
+    position:absolute;
+}
+
+.selected-elements > .ammount {
+    position: absolute;
+    bottom: 0;
+    padding-bottom: 4px;
+    padding-left: 5px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 3vmin;
+    margin-bottom: 0.2vmin;
+    margin-left: 0.4vmin;
+    padding-right: 1vmin;
+    background-color: #788c9c;
+    padding-top: 0.5vmin;
+    border-radius: 25px;
+}
+
+.actor {
+    height: 12vmin; 
+    width: 10vmin;
+}
+
+.actor > img {
+    height: 8vmin;
+    margin-left: 3vmin;
+    margin-top: 1vmin;
+}
+
+.ellipse {
+    height: 12vmin;
+    width: 16vmin;
+}
+
+.ellipse > img {
+    height: 10vmin;
+    margin-top: 0.5vmin;
+    margin-left: 0.5vmin;
+}
+
+.package {
+    height: 12vmin;
+    width: 17vmin;
+}
+
+.package > img {
+    height: 9.5vmin;
+    margin-top: 0.5vmin;
+    margin-left: 2.5vmin;
+}
+
+.boundary {
+    height: 12vmin;
+    width: 17vmin;
+}
+
+.boundary > img {
+    height: 9.5vmin;
+    margin-top: 0.5vmin;
+    margin-left: 2.5vmin;
+}
+
+.note {
+    height: 12vmin;
+    width: 17vmin;
+}
+
+.note > img {
+    height: 9.5vmin;
+    margin-top: 0.5vmin;
+    margin-left: 2.5vmin;
+}
+
+/*stop scrolling*/
+.lock-screen {
+    height: 100%;
+    overflow: hidden;
+    width: 100%;
+    position: fixed;
+    -webkit-touch-callout: none !important; 
+}
+
+#myCanvas {
+    margin-top:10px;
+}
+
+.confirm {
+    background-color: rgba(0, 128, 0, 0.31) !important;
+}
+
+.cancel {
+    background-color: #ffadad !important;
+}
+
+.undo {
+    background-color: #ffffb5 !important;
+}
+
+.redo {
+    background-color: #ffffb5 !important;
+}
+
+@media (orientation: portrait) { 
+
+    .item {
+        float: left;
+        width: 15vmin;
+        text-align: right;
+    }
+
+    .toolbox {
+        padding-left: 7vmin;
+    }
+
+}
+a { -webkit-user-select: none !important; }
+
+/*
+==============================================
+slideLeft
+==============================================
+*/
+
+
+.slideLeft {
+    animation-name: slideLeft;
+    -webkit-animation-name: slideLeft;  
+
+    animation-duration: 1s; 
+    -webkit-animation-duration: 1s;
+
+    animation-timing-function: ease-in-out; 
+    -webkit-animation-timing-function: ease-in-out;     
+
+    visibility: visible !important; 
+}
+
+@keyframes slideLeft {
+    0% {
+        transform: translateX(150%);
+    }
+    50%{
+        transform: translateX(-8%);
+    }
+    65%{
+        transform: translateX(4%);
+    }
+    80%{
+        transform: translateX(-4%);
+    }
+    95%{
+        transform: translateX(2%);
+    }           
+    100% {
+        transform: translateX(0%);
+    }
+}
+
+@-webkit-keyframes slideLeft {
+    0% {
+        -webkit-transform: translateX(150%);
+    }
+    50%{
+        -webkit-transform: translateX(-8%);
+    }
+    65%{
+        -webkit-transform: translateX(4%);
+    }
+    80%{
+        -webkit-transform: translateX(-4%);
+    }
+    95%{
+        -webkit-transform: translateX(2%);
+    }           
+    100% {
+        -webkit-transform: translateX(0%);
+    }
+}
+
+/*
+==============================================
+pulse
+==============================================
+*/
+
+.pulse{
+    animation-name: pulse;
+    -webkit-animation-name: pulse;  
+
+    animation-duration: 1s;   
+    -webkit-animation-duration: 1s;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.9);
+        opacity: 0.7;       
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1; 
+    }   
+}
+
+@-webkit-keyframes pulse {
+    0% {
+        -webkit-transform: scale(0.95);
+        opacity: 0.7;       
+    }
+    100% {
+        -webkit-transform: scale(0.95);
+        opacity: 1;   
+    }           
+}

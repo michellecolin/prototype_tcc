@@ -1,3 +1,0 @@
-//Diagram
-
-console.log(Diagram);

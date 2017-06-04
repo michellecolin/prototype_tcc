@@ -1,8 +1,8 @@
 Diagram = {
 
 	action: null,
-	canvas: null,
-  canvasRect: null,
+	unistrokeCanvas: null,
+  unistrokeCanvasRect: null,
 
   init: function() {
   	console.log("diagram");
@@ -18,8 +18,8 @@ Diagram = {
 
   confirmAction: function() {
   	console.log("confirming action");
-    _canvas = this.canvas; //binding problem on setTimeout
-    _rc = this.canvasRect;
+    _canvas = this.unistrokeCanvas; //binding problem on setTimeout
+    _rc = this.unistrokeCanvasRect;
 
     if (this.action) {
       $("#myCanvas").addClass("confirm");
@@ -36,8 +36,8 @@ Diagram = {
 
   undoAction: function() {
     console.log("confirming undo");
-    _canvas = this.canvas; //binding problem on setTimeout
-    _rc = this.canvasRect;
+    _canvas = this.unistrokeCanvas; //binding problem on setTimeout
+    _rc = this.unistrokeCanvasRect;
     $("#myCanvas").addClass("undo");
     
     setTimeout(function() {
@@ -48,8 +48,8 @@ Diagram = {
 
   redoAction: function() {
     console.log("confirming redo");
-    _canvas = this.canvas; //binding problem on setTimeout
-    _rc = this.canvasRect;
+    _canvas = this.unistrokeCanvas; //binding problem on setTimeout
+    _rc = this.unistrokeCanvasRect;
     $("#myCanvas").addClass("redo");
     
     setTimeout(function() {
@@ -60,8 +60,8 @@ Diagram = {
 
   cancelAction: function() {
     console.log("confirming cancel");
-    _canvas = this.canvas; //binding problem on setTimeout
-    _rc = this.canvasRect;
+    _canvas = this.unistrokeCanvas; //binding problem on setTimeout
+    _rc = this.unistrokeCanvasRect;
     $("#myCanvas").addClass("cancel");
     
     setTimeout(function() {

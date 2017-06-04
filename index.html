@@ -14,12 +14,12 @@
     <META http-equiv="Expires" content="0">
 
     <title>Action gestures</title>
-    <script src="scripts/fingers.js"></script>
-    <script type="text/javascript" src="scripts/canvas.text.js"></script>
-    <script type="text/javascript" src="scripts/jquery.min.js"></script>
+    <script src="scripts/libs/fingers.js"></script>
+    <script type="text/javascript" src="scripts/libs/canvas.text.js"></script>
+    <script type="text/javascript" src="scripts/libs/jquery.min.js"></script>
+    <script type="text/javascript" src="scripts/libs/dollar.js"></script>
     <script src="scripts/diagram.js"></script>
     <script src="scripts/main.js"></script>
-    <script type="text/javascript" src="scripts/dollar.js"></script>
     <script type="text/javascript" src="scripts/gestureRecognizer.js"></script>
 
     <style>
@@ -27,6 +27,7 @@
             margin: 0;
             overflow: hidden;
         }
+
         .testBox {
             display: inline-block;
             width: 300px; height: 200px;
@@ -223,10 +224,11 @@
         <div class="ammount">3</div>
     </div>
 
-     <canvas id="myCanvas" width="2000px" height="2000px"
+    <canvas id="myCanvas" width="2000px" height="2000px"
         oncontextmenu="return false;">
         <span style="background-color:#ffff88;">The &lt;canvas&gt; element is not supported by this browser.</span>
     </canvas>
+    <div id="paper"></div>
 
     <div style="margin-top: 1000px">
         <div id="testSwipe2" class="testBox"><div class="innerLabel">Swipe Me<br/>with 2 fingers</div></div>
@@ -403,5 +405,6 @@
         });
 
     </script> 
+
 </body>
 </html>

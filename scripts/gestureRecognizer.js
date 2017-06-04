@@ -22,8 +22,8 @@
 			_g.font = "16px Arial";
 			_rc = getCanvasRect(canvas); // canvas rect on page
 
-			Diagram.canvas = _g;
-			Diagram.canvasRect = _rc;
+			Diagram.unistrokeCanvas = _g;
+			Diagram.unistrokeCanvasRect = _rc;
 
 			_isDown = false;
 

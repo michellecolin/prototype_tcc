@@ -81,6 +81,9 @@ Canvas = {
         boxListLength = boxList.length;
         for(var i=0; i<boxListLength; i++) {
             listen(boxList[i]);
+            MultitouchEvents.listenDoubleTap(boxList[i].element);
+            MultitouchEvents.listenTwoFingerDoubleTap(boxList[i].element);
+            MultitouchEvents.listenTap(boxList[i].element);
         }
 
         loop();
@@ -107,6 +110,7 @@ Canvas = {
         var divE = document.createElement("div");
         var img = document.createElement("img");
         var divLabel = document.createElement("div");
+        var elId = boxList.length ? boxList.length + 1 : 1;
 
         if (elementType == "boundary") {
             img.setAttribute("src", "prototype_tcc/../img/boundary_canvas.png");
@@ -117,7 +121,8 @@ Canvas = {
         divLabel.className = elementType + "-el-name";
         divLabel.innerHTML = elementType + ' ' + count;
 
-        divE.className = elementType + "-box";
+        divE.className = elementType + "-box box";
+        divE.id = elId;
         if (elementType == "boundary") {
             divE.appendChild(divLabel);
             divE.appendChild(img);
@@ -125,6 +130,13 @@ Canvas = {
             divE.appendChild(img);
             divE.appendChild(divLabel);
         }
+
+        /*create edit menu
+        var menu = document.createElement("ul");
+        menu.style.display = "none";
+        menu.className = "list";
+        menu.innerHTML = '<li>Male - M</li><li>Female - M</li>';
+        divE.appendChild(menu);*/     
 
         document.body.appendChild(divE);
         return {
@@ -138,27 +150,32 @@ Canvas = {
             rafId: 0,
             zIndex: 0,
             type: elementType,
-            id: boxList.length ? boxList.length + 1 : 1
+            id: elId
         }
     },
 
     removeElements: function(elements) {
+        var removedEl = [];
         elements.forEach(function(el){
             for (var i = 0; i < boxList.length; i++) {
-                if (boxList[i].id === el.id) {
+                console.log(boxList[i]);
+                if (boxList[i].id == el.id) {
                     boxList[i].element.style.display = 'none'; //pog
+                    removedEl.push(boxList[i]);
                 }
             }
         });
+        return removedEl;
     },
     readdElements: function(elements) {
         console.log("readd");
         console.log(elements);
-        
+
         elements.forEach(function(el){
             for (var i = 0; i < boxList.length; i++) {
-                if (boxList[i].id === el.id) {
+                if (boxList[i].id == el.id) {
                     boxList[i].element.style.display = 'block'; //pog
+                    boxList[i].element.style.display = 'block';
                 }
             }
         });
@@ -204,18 +221,6 @@ $( document ).ready(function() {
     loop();*/
 });
 
-/*select menu options*/
-function listenTap(pElement) {
-    var finger = new Fingers(pElement);
-    finger.addGesture(Fingers.gesture.Tap, {
-        nbFingers: 1
-    }).addHandler(function(pEventType, pData, pFingers) {
-        if (pData.nbTap === 1) {
-            console.log("select element of menu");
-        }
-    });
-};
-
 
 /* select elements to create relationships */
 function listenHoldTwoFinger(pElement) {  
@@ -229,44 +234,9 @@ function listenHoldTwoFinger(pElement) {
     });
 };
 
-/*select elements to be excluded*/
-function listenDoubleTap(pElement) {
-    var finger = new Fingers(pElement);
-    finger.addGesture(Fingers.gesture.Tap, {
-        nbFingers: 1
-    }).addHandler(function(pEventType, pData, pFingers) {
-        if (pData.nbTap === 2) {
-            setTimeout(function(){
-                if (!FILTER) {
-                    console.log("element selected to be deleted");
-                }   
-            },70);
-        }
-    });
-};
 
-/* select element to be filtered */
-function listenTwoFingerDoubleTap(pElement) {
-    var finger = new Fingers(pElement);
-    finger.addGesture(Fingers.gesture.Tap, {
-        nbFingers: 2
-    }).addHandler(function(pEventType, pData, pFingers) {
-        if (pData.nbTap === 2) {
-            FILTER = true; 
-            console.log("element selected to be filtered");
-        }
-    });
-};
 
-/*swipe out filter */
-function listenSwipe(pElement) {
-    var finger = new Fingers(pElement);
-    finger.addGesture(Fingers.gesture.Swipe, {
-        nbFingers: 2
-    }).addHandler(function(pEventType, pData, pFingers) {
-        console.log("swipe filter off screen");
-    });
-}
+
 
 /*edit element name*/
 function listenHoldOneFinger(pElement) {

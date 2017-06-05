@@ -23,6 +23,7 @@
     <script type="text/javascript" src="scripts/libs/dollar.js"></script>
     <script src="scripts/diagram.js"></script>
     <script src="scripts/canvas-logic.js"></script>
+    <script src="scripts/multitouch.js"></script>
     <script type="text/javascript" src="scripts/gestureRecognizer.js"></script>
 </head>
 <body class="lock-screen" onload="onLoadEvent()"> <!-- start gesture recognition -->
@@ -37,6 +38,27 @@
 
     <div class="modal">
         <div class="error">This axtion is not</div>
+    </div>
+
+    <div class="edit-menu">
+        <div class="content">
+            <input type="text"/>
+            <button id="changeName">OK</button>
+        </div>
+    </div>
+
+    <div id="filter" class="filter">
+        <div class="header">
+            <div class="title">Filter</div>
+            <div class="element"><span class="element-filter"></span></div>
+        </div>
+        <div class="results">
+            <ul>
+              <li>Diagrama A</li>
+              <li>Diagrama B</li>
+              <li>Diagrama C</li>
+            </ul>
+        </div>
     </div>
 
     <div class="hold-inserted-elements">
@@ -69,6 +91,9 @@
 
 <script>
     var elementsToBeAdded = {};
+    var elementsToBeRemoved = [];
+    var selectedElements = [];
+
     document.body.style.webkitTouchCallout='none';
 
     window.oncontextmenu = function(event) {
@@ -76,80 +101,7 @@
          event.stopPropagation();
          return false;
     };
-    
-    function listenSwipe(pElement, pLabelElement) {
-        var finger = new Fingers(pElement);
-        finger.addGesture(Fingers.gesture.Swipe, {
-            nbFingers: 2
-        }).addHandler(function(pEventType, pData, pFingers) {
-            updateLabel(pLabelElement, "Swipe " + pData.direction + "<br/>Velocity: "+ pData.velocity.toFixed(2) + " px/ms");
-        });
-    }
-
-    function listenHoldOneFinger(pElement, pLabelElement) {
-        var finger = new Fingers(pElement);
-        finger.addGesture(Fingers.gesture.Hold, {
-            nbFingers: 1
-        }).addHandler(function(pEventType, pData, pFingers) {
-            if (pElement.dataset.action === "insert") {
-                Diagram.actionStarted("insert", elementsToBeAdded);
-                addDiagramElements(pElement.id);  
-                updateImage(pLabelElement, pElement.id); 
-            }              
-        });
-    };
-
-    function listenHoldTwoFinger(pElement, pLabelElement) {
-        var finger = new Fingers(pElement);
-        finger.addGesture(Fingers.gesture.Hold, {
-            nbFingers: 2
-        }).addHandler(function(pEventType, pData, pFingers) {
-            updateLabel(pLabelElement, "Hold " + pFingers.length);
-        });
-    };
-
-
-    function listenHoldThreeFinger(pElement, pLabelElement) {
-        var finger = new Fingers(pElement);
-        finger.addGesture(Fingers.gesture.Hold, {
-            nbFingers: 3
-        }).addHandler(function(pEventType, pData, pFingers) {
-            updateLabel(pLabelElement, "");
-        });
-    };
-
-
-    function listenHold(pElement, pLabelElement, pNbFingers) {
-        var finger = new Fingers(pElement);
-        finger.addGesture(Fingers.gesture.Hold, {
-            nbFingers: pNbFingers
-        }).addHandler(function(pEventType, pData, pFingers) {
-            updateLabel(pLabelElement, "Hold");
-        });
-    };
-
-    function listenTap(pElement, pLabelElement) {
-        var finger = new Fingers(pElement);
-        finger.addGesture(Fingers.gesture.Tap, {
-            nbFingers: 1
-        }).addHandler(function(pEventType, pData, pFingers) {
-            if (pData.nbTap === 1) {
-                updateLabel(pLabelElement, "Tap<br/>" + pData.nbTap + "x");
-            }
-        });
-    };
-
-    function listenDoubleTap(pElement, pLabelElement) {
-        var finger = new Fingers(pElement);
-        finger.addGesture(Fingers.gesture.Tap, {
-            nbFingers: 1
-        }).addHandler(function(pEventType, pData, pFingers) {
-            if (pData.nbTap === 2) {
-                updateLabel(pLabelElement, "Tap<br/>" + pData.nbTap + "x");
-            }
-        });
-    };
-
+   
     function updateLabel(pLabelElement, pNewLabel) {
         clearTimeout(pLabelElement.__timeout__);
         if(!pLabelElement.__originalLabel__) { pLabelElement.__originalLabel__ = pLabelElement.innerHTML; }
@@ -251,14 +203,87 @@
         },2000);
     }
 
+    function removeDiagramElements(elementId, element) {
+        if($.inArray(element, elementsToBeRemoved) === -1) {
+            elementsToBeRemoved.push(element);
+        }
+        //boundary
+        var imgsrc = $("#"+ elementId).find('img').attr('src');
+        if (imgsrc.indexOf("_removed") == -1) {
+            imgsrc = imgsrc.slice(0,imgsrc.length-4) + "_removed.png";
+        }
+
+        $("#"+ elementId).find('img').attr('src', imgsrc);
+        $("#"+ elementId).find('div').css('display', 'none');
+
+        console.log(elementsToBeRemoved); 
+    };
+
+    function showElementsLabels(elements) {
+        elements.forEach(function(el) {
+            $("#"+ el.id).find('div').css('display', 'block');
+        });
+    }
+
+    function filterElement(element) {
+        console.log(element);
+        selectedElements.push(element);
+        selectElement(element);
+        $(".element-filter").html($("#"+ element.id).find('div').html());
+        $("#filter").show();
+        MultitouchEvents.listenSwipe(document.getElementById("filter"));
+    };
+
+    function exitFilterMenu(element) {
+        $("#" + element.id).addClass("slideRight");
+        selectedElements.forEach(function(element) {
+            deSelectElement(element);
+        });
+        FILTER = false;
+        selectedElements = [];
+    }
+
+    function selectElement(element) {
+        var imgsrc = $("#"+ element.id).find('img').attr('src');
+        if (imgsrc.indexOf("_selected") == -1) {
+            imgsrc = imgsrc.slice(0,imgsrc.length-4) + "_selected.png";
+        }
+        $("#"+ element.id).find('img').attr('src', imgsrc);
+    }
+
+    function deSelectElement(element) {
+        var imgsrc = $("#"+ element.id).find('img').attr('src');
+        if (imgsrc.indexOf("_selected") >= 0) {
+            imgsrc = imgsrc.slice(0,imgsrc.length-13) + ".png";
+        }
+        $("#"+ element.id).find('img').attr('src', imgsrc);
+    }
+
+    function changeElImagesBackToOriginal(elements) {
+        //gotta change the images back
+        elements.forEach(function(el) {
+          var imgsrc = $("#"+ el.id).find('img').attr('src');
+          if (imgsrc.indexOf("_removed") >= 0) {
+              imgsrc = imgsrc.slice(0,imgsrc.length-12) + ".png";
+              $("#"+ el.id).find('img').attr('src', imgsrc);
+          }
+        });
+        elementsToBeRemoved = [];
+    }
+
     var toolbox = document.getElementsByClassName("toolbox");
 
     Array.from(toolbox[0].children).forEach(function(item) {
         if (item.id) {
             var item = document.getElementById(item.id);
-            listenHoldOneFinger(item, item.querySelector(".inner"));
+            MultitouchEvents.listenHoldOneFinger(item, item.querySelector(".inner"));
         }
     });
+
+    document.getElementById('filter').addEventListener('webkitAnimationEnd',function( event ) { 
+        document.getElementById('filter').style.display = 'none'; 
+        $("#filter").removeClass("slideRight");
+    }, false);
 
 </script> 
 

@@ -91,13 +91,13 @@
 
 					//To decide style of the line. dotted or solid
 					switch (option.style) {
-						case 'include':
-						case 'extend':
+						case 'Include':
+						case 'Extend':
 							_dash = [4, 2];
 							break;
 
-						case 'association':
-						case 'generalization':
+						case 'Association':
+						case 'Generalization':
 							_dash = [0, 0];
 							break;
 
@@ -112,8 +112,8 @@
 
 					//If left_node is actually right side, following code will switch elements.
 					//$(option.right_node).each(function(index, value) {
-						_left_node = $(option.left_node);
-						_right_node = $(option.right_node);
+						_left_node = $(option.left_node); //first
+						_right_node = $(option.right_node); //second
 						/*if (_left_node.offset().left >= _right_node.offset().left) {
 							_tmp = _left_node
 							_left_node = _right_node
@@ -121,22 +121,20 @@
 						}*/
 
 						//Get Left point and Right Point
-						_left.x = _left_node.offset().left + _left_node.outerWidth();
-						_left.y = (_left_node.offset().top + (_left_node.outerHeight() / 2) -80);
+						console.log("first element offset");
+						console.log(_left_node.offset());
+						console.log(_left_node.outerWidth());
+						_left.x = (_left_node.offset().left + _left_node.outerWidth());
+						console.log(_left.x);
+						console.log("-----------------");
+						_left.y = (_left_node.offset().top + (_left_node.outerHeight() / 2) -50);
 						console.log(_left_node.offset().top); 
 						console.log(_left_node.outerWidth());
 						//offset top - altura do elemento
 						_right.x = _right_node.offset().left;
 						console.log(_right_node.offset().top);
 						console.log(_right_node.outerWidth());
-						_right.y = (_right_node.offset().top + (_right_node.outerHeight() / 2) -80);
-
-						console.log(_left_node);
-						console.log("_left");
-						console.log(_left);
-						console.log(_right_node);
-						console.log("_right");
-						console.log(_right);
+						_right.y = (_right_node.offset().top + (_right_node.outerHeight() / 2) -50);
 
 						//Create a group
 						//var g = _canvas.group({strokeWidth: 2, strokeDashArray:_dash}); 	
@@ -146,6 +144,7 @@
 
 
 						_ctx.moveTo(_left.x, _left.y);
+
 						if (_gap != 0) {
 							_ctx.lineTo(_left.x + _gap, _left.y);
 							_ctx.lineTo(_right.x - _gap, _right.y);
@@ -162,19 +161,19 @@
 						_ctx.strokeStyle = _color;
 						var line = _ctx.stroke();
 
-						if (option.style != "association") {
+						if (option.style != "Association") {
 							_ctx.font = "15px Arial";
 
-							if (option.style != "generalization") {
+							if (option.style != "Generalization") {
 								_ctx.fillText("<<"+ option.style +">>", (_left.x +_right.x)/2 ,(_left.y + _right.y)/2);
 							}
 							 // draw the starting arrowhead
-							 if (option.style == "include" || option.style == "generalization") {
+							 if (option.style == "Include" || option.style == "Generalization") {
 						 		 	var startRadians=Math.atan((_right.y-_left.y)/(_right.x-_left.x));
 			            console.log(startRadians);
 			            startRadians+=((_right.x>_left.x)?-90:90)*Math.PI/180;
 			            drawArrowhead(_ctx,_left.x , _left.y,startRadians);
-							 } else if (option.style == "extend") {
+							 } else if (option.style == "Extend") {
 							 	 // draw the ending arrowhead
 		          	var endRadians=Math.atan((_left.y-_right.y)/(_left.x-_right.x));
 		            endRadians+=((_right.x>_left.x)?90:-90)*Math.PI/180;

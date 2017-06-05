@@ -44,6 +44,9 @@ Diagram = {
           showRelationshipPage();
           Canvas.hideElementsNotSelected(this.action.elements);
           this.actionStarted("showRelationshipPage", this.action.elements);
+          this.action.elements.forEach(function(el){
+            deSelectElement(el);
+          });
           console.log("mudando pra pagina");
           console.log(this.action);
           break;
@@ -206,5 +209,6 @@ Diagram = {
         showErrorModal("No action was performed");
         _canvas.clearRect(0, 0, _rc.width, _rc.height);
     }
-  }  
+  }
+
 }

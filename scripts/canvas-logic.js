@@ -65,6 +65,8 @@ function loop() {
 }
 
 Canvas = {
+    temporaryRelationships: [],
+    relationships: [],
     createElements: function(elements) {
         var thisAction = [];
         for (var elementType in elements) {
@@ -119,12 +121,10 @@ Canvas = {
             divE.appendChild(divLabel);
         }
 
-        /*create edit menu
         var menu = document.createElement("ul");
-        menu.style.display = "none";
         menu.className = "list";
-        menu.innerHTML = '<li>Male - M</li><li>Female - M</li>';
-        divE.appendChild(menu);*/     
+        menu.innerHTML = '<li>Association</li><li>Generalization</li><li>Extend</li><li style="border-bottom:none;">Include</li>';
+        divE.appendChild(menu);
 
         document.body.appendChild(divE);
         return {
@@ -190,6 +190,29 @@ Canvas = {
                 }
             }
         });
+    },
+
+    relateDiagramElements: function(elements, type) {
+        console.log("createRelationship");
+        console.log(elements);
+        console.log(type);
+
+        var mySVG = $('body').connect();
+        mySVG.drawLine({
+            left_node: elements.first,
+            right_node: elements.second,
+            error: true,
+            width: 1,
+            gap: 300,
+            style: type
+        });
+        
+        $(elements.first).on("touchmove", function(event, ui){
+            mySVG.redrawLines();
+        });
+        $(elements.second).on("touchmove", function(event, ui){
+            mySVG.redrawLines();
+        });
     }
 }
 
@@ -204,96 +227,3 @@ $( document ).ready(function() {
     TRANSFORM_PREFIXED = getVendorPrefixed(["transform", "msTransform", "MozTransform", "webkitTransform", "OTransform"]);
 });
 
-
-
-
-
-
-
-/*edit element name*/
-function listenHoldOneFinger(pElement) {
-    var finger = new Fingers(pElement);
-    finger.addGesture(Fingers.gesture.Hold, {
-        nbFingers: 1
-    }).addHandler(function(pEventType, pData, pFingers) {
-        console.log(pFingers);
-        console.log(pData, pEventType);
-        setTimeout(function(){
-            if(!RELATE){
-                console.log("edit element name");
-            }   
-        },50);
-        
-    });
-};
-
-function initializeRelationships() {
-    /*var mySVG = $('body').connect();
-    mySVG.drawLine({
-        left_node:'.node1',
-        right_node:'.node2',
-        error:true,
-        width:1,
-        style:'association'
-    });
-    $( ".node1" ).draggable({
-      drag: function(event, ui){mySVG.redrawLines();}
-    });
-    $( ".node2" ).draggable({
-      drag: function(event, ui){mySVG.redrawLines();}
-    });
-
-    var mySVG3 = $('body').connect();
-        mySVG3.drawLine({
-            left_node:'.node3',
-            right_node:'.node4',
-            error:true,
-            width:1,
-            style:'include'
-        });
-        $( ".node3" ).draggable({
-          drag: function(event, ui){mySVG3.redrawLines();}
-        });
-        $( ".node4" ).draggable({
-          drag: function(event, ui){mySVG3.redrawLines();}
-        });
-
-    var mySVG2 = $('body').connect();
-        mySVG2.drawLine({
-            left_node:'.node5',
-            right_node:'.node6',
-            error:true,
-            width:1,
-            style:'extend'
-        });
-        $( ".node5" ).draggable({
-          drag: function(event, ui){mySVG2.redrawLines();}
-        });
-        $( ".node6" ).draggable({
-          drag: function(event, ui){mySVG2.redrawLines();}
-        });
-
-    var mySVG4 = $('body').connect();
-        mySVG4.drawLine({
-            left_node:'.node7',
-            right_node:'.node8',
-            error:true,
-            width:1,
-            style:'generalization'
-        });
-        $( ".node7" ).draggable({
-          drag: function(event, ui){mySVG4.redrawLines();}
-        });
-        $( ".node8" ).draggable({
-          drag: function(event, ui){mySVG4.redrawLines();}
-        });*/
-}
-
-
-/*
-$( ".node1" ).draggable({
-  drag: function(event, ui){mySVG.redrawLines();}
-});
-$( ".node2" ).draggable({
-  drag: function(event, ui){mySVG.redrawLines();}
-});*/

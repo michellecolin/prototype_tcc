@@ -46,6 +46,15 @@
         <div class="error">This axtion is not</div>
     </div>
 
+    <!--<div class="box">
+        <ul class="list">
+            <li>Association</li>
+            <li>Generalization</li>
+            <li>Extend</li>
+            <li>Include</li>
+        </ul>
+    </div>-->
+
     <div class="edit-menu">
         <div class="content">
             <input type="text"/>
@@ -89,19 +98,6 @@
             <div class="ammount">3</div>
         </div>
     </div>
-
-    <!--
-    <div class="node1">Drag Me -associar</div>
-    <div class="node2" style="left: 528px; top: 80px;">Drag Me</div>
-
-    <div class="node3">Drag Me - extend</div>
-    <div class="node4" style="left: 528px; top: 80px;">Drag Me</div>
-
-    <div class="node5">Drag Me - include</div>
-    <div class="node6" style="left: 528px; top: 80px;">Drag Me</div>
-
-    <div class="node7">Drag Me - include</div>
-    <div class="node8" style="left: 528px; top: 80px;">Drag Me</div>-->
 
     <canvas id="myCanvas" width="2000px" height="2000px"
         oncontextmenu="return false;">
@@ -190,6 +186,7 @@
     var elementsToBeRemoved = [];
     var selectedElements = [];
     var elementsToBeRelated = [];
+    var twoElementsRelationship = {};
 
     document.body.style.webkitTouchCallout='none';
 
@@ -387,6 +384,23 @@
 
     function showRelationshipPage() {
         $('.relate').show();
+    }
+
+    function selectDiagramToRelate(elementId, element) {
+        if (twoElementsRelationship.first) {
+            twoElementsRelationship.second = element;
+            $("#"+ element.id).find('ul.list').css('display', 'block');
+            var lis = $("#"+ element.id).find('ul.list').children();
+            Array.from(lis).forEach(function(li){
+                MultitouchEvents.listenTapMenu(li);
+            });
+
+        } else {
+            twoElementsRelationship.first = element;
+        }
+        selectElement(element);
+        console.log("lalala");
+        console.log(twoElementsRelationship);
     }
 
     var toolbox = document.getElementsByClassName("toolbox");

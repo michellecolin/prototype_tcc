@@ -1,7 +1,7 @@
 .actor-box {
     position: absolute;
     text-align: center;
-    width: 150px; /*actor*/
+    width: 100px;
     margin-top: -2000px;
 }
 
@@ -12,18 +12,20 @@
 .actor-el-name {
     color: black !important;
     text-align: center;
-    width: 150px; /*actor*/
+    width: 150px;
+    margin-left: -25px;
 }
 
 .ellipse-box {
     position: absolute;
     text-align: center;
-    width: 150px;
+    width: 200px;
+    height: 130px;
     margin-top: -2000px;
 }
 
 .ellipse-box > img {
-    width: 200px;
+    height: 130px;
 }
 
 .ellipse-el-name {
@@ -37,12 +39,13 @@
 .package-box {
     position: absolute;
     text-align: center;
-    width: 150px;
+    width: 200px;
+    height: 140px;
     margin-top: -2000px;
 }
 
 .package-box > img {
-    width: 200px;
+    height: 140px;
 }
 
 .package-el-name {
@@ -75,12 +78,13 @@
 .note-box {
     position: absolute;
     text-align: center;
-    width: 150px;
+    width: 200px;
     margin-top: -2000px;
+    height: 145px;
 }
 
 .note-box > img {
-    width: 200px;
+    height: 145px
 }
 
 .note-el-name {

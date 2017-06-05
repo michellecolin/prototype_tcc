@@ -391,20 +391,29 @@ pulse
     display: none;
     position: absolute;
     left: 30px;
-    top: -30px;
+    top: 100px;
+    /* top: -30px; */
     z-index: 999;
+    color: #fff;
     width: 300px;
     margin: 0;
+    font-size: 1.8vw;
     padding: 10px;
+    font-family: san-serif;
     list-style: none;
-    background: #fff;
-    color: #333;
+    background: #25a985;
+    /* color: #333; */
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
     -moz-box-shadow: 0 0 5px #999;
     -webkit-box-shadow: 0 0 5px #999;
     box-shadow: 0 0 5px #999;
+}
+
+.box>ul.list > li {
+    padding: 10px;
+    border-bottom: 1px solid #0e7156;
 }
 
 .edit-menu {

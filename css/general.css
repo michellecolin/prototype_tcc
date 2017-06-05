@@ -51,6 +51,26 @@ html, body {
     padding-left: 10vw;
 }
 
+.relate {
+    background: #205d75;
+    -webkit-box-shadow: -1px 10px 13px -7px rgba(0,21,25,0.71);
+    -moz-box-shadow: -1px 10px 13px -7px rgba(0,21,25,0.71);
+    box-shadow: -1px 10px 13px -7px rgba(0,21,25,0.71);
+    padding-top: 5px;
+    padding-left: 10vw;
+    position: absolute;
+    z-index: 3;
+    height: 10vmin;
+    width: 100%;
+    display: none;
+}
+
+.relate > .header {
+    border: none;
+    color: #fff;
+    font-size: 3vmin;
+}
+
 .toolbox img {
     height: 8vmin;
     padding-top: 2px;

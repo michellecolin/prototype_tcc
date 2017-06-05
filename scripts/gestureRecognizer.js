@@ -40,6 +40,8 @@
 			$("#myCanvas").on("touchend", function(event){ 
 				mouseUpEvent(lastMove.touches[0].clientX, lastMove.touches[0].clientY);
 			});
+
+			initializeRelationships();
 		}
 
 		function getCanvasRect(canvas)

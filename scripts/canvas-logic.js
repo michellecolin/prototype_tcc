@@ -84,6 +84,7 @@ Canvas = {
             MultitouchEvents.listenDoubleTap(boxList[i].element);
             MultitouchEvents.listenTwoFingerDoubleTap(boxList[i].element);
             MultitouchEvents.listenTap(boxList[i].element);
+            MultitouchEvents.listenHoldTwoFinger(boxList[i].element);
         }
 
         loop();
@@ -91,19 +92,6 @@ Canvas = {
             allElements: boxList,
             elementsAdded: thisAction
         }
-        /*            
-        Array.from(x).forEach(function(img){
-            console.log(img);
-            listenHoldTwoFinger(img);
-            listenDoubleTap(img);
-            listenTwoFingerDoubleTap(img);
-            listenHoldOneFinger(img);
-            listenTap(img);
-        });*/
-
-        // listenSwipe(document.getElementById("swipe"));
-
-        //transform(boxO); -> just for boundary*/
     },
 
     createElement: function(elementType, count) {
@@ -167,6 +155,29 @@ Canvas = {
         });
         return removedEl;
     },
+
+    hideElementsNotSelected: function(elements) {
+        for (var i = 0; i < boxList.length; i++) {
+            var matched = false;
+            elements.forEach(function(el) {
+                if (boxList[i].id == el.id) {
+                    console.log(el.id);
+                    matched = true;
+                }
+            });
+
+            if (!matched) {
+                boxList[i].element.style.display = 'none';
+            }
+        }
+    },
+
+    showAllElements: function(element) {
+        for (var i = 0; i < boxList.length; i++) {
+            boxList[i].element.style.display = 'block';
+        }
+    },
+
     readdElements: function(elements) {
         console.log("readd");
         console.log(elements);
@@ -191,48 +202,9 @@ var FILTER = false;
 
 $( document ).ready(function() {
     TRANSFORM_PREFIXED = getVendorPrefixed(["transform", "msTransform", "MozTransform", "webkitTransform", "OTransform"]);
-
-    //when boundary innvert order <div class="el-name">Ator 1</div><img src="boundary.png">
-   /* for(var i=0; i<10; i++) {
-        var boxO = createBox('<img src="img/actor.png"><div class="el-name">Ator 1</div>');
-        console.log(boxO);
-        boxList.push(boxO);
-        //transform(boxO); -> just for boundary
-    }
-
-    var x = document.getElementsByClassName("box");
-    console.log(document.getElementsByClassName("box"));
-    Array.from(x).forEach(function(img){
-        console.log(img);
-        listenHoldTwoFinger(img);
-        listenDoubleTap(img);
-        listenTwoFingerDoubleTap(img);
-        listenHoldOneFinger(img);
-        listenTap(img);
-    });
-
-   // listenSwipe(document.getElementById("swipe"));
-
-    boxListLength = boxList.length;
-    for(var i=0; i<boxListLength; i++) {
-        listen(boxList[i]);
-    }
-
-    loop();*/
 });
 
 
-/* select elements to create relationships */
-function listenHoldTwoFinger(pElement) {  
-    var finger = new Fingers(pElement);
-    finger.addGesture(Fingers.gesture.Hold, {
-        nbFingers: 2
-    }).addHandler(function(pEventType, pData, pFingers) {
-        RELATE = true; /*when user done relating - set to false */
-        console.log(pEventType, pData, pFingers);
-        console.log("element selected to create relationship");
-    });
-};
 
 
 
@@ -255,3 +227,73 @@ function listenHoldOneFinger(pElement) {
     });
 };
 
+function initializeRelationships() {
+    /*var mySVG = $('body').connect();
+    mySVG.drawLine({
+        left_node:'.node1',
+        right_node:'.node2',
+        error:true,
+        width:1,
+        style:'association'
+    });
+    $( ".node1" ).draggable({
+      drag: function(event, ui){mySVG.redrawLines();}
+    });
+    $( ".node2" ).draggable({
+      drag: function(event, ui){mySVG.redrawLines();}
+    });
+
+    var mySVG3 = $('body').connect();
+        mySVG3.drawLine({
+            left_node:'.node3',
+            right_node:'.node4',
+            error:true,
+            width:1,
+            style:'include'
+        });
+        $( ".node3" ).draggable({
+          drag: function(event, ui){mySVG3.redrawLines();}
+        });
+        $( ".node4" ).draggable({
+          drag: function(event, ui){mySVG3.redrawLines();}
+        });
+
+    var mySVG2 = $('body').connect();
+        mySVG2.drawLine({
+            left_node:'.node5',
+            right_node:'.node6',
+            error:true,
+            width:1,
+            style:'extend'
+        });
+        $( ".node5" ).draggable({
+          drag: function(event, ui){mySVG2.redrawLines();}
+        });
+        $( ".node6" ).draggable({
+          drag: function(event, ui){mySVG2.redrawLines();}
+        });
+
+    var mySVG4 = $('body').connect();
+        mySVG4.drawLine({
+            left_node:'.node7',
+            right_node:'.node8',
+            error:true,
+            width:1,
+            style:'generalization'
+        });
+        $( ".node7" ).draggable({
+          drag: function(event, ui){mySVG4.redrawLines();}
+        });
+        $( ".node8" ).draggable({
+          drag: function(event, ui){mySVG4.redrawLines();}
+        });*/
+}
+
+
+/*
+$( ".node1" ).draggable({
+  drag: function(event, ui){mySVG.redrawLines();}
+});
+$( ".node2" ).draggable({
+  drag: function(event, ui){mySVG.redrawLines();}
+});*/

@@ -1,5 +1,6 @@
 FILTER = false;
 REMOVE = false;
+RELATE = false;
 
 MultitouchEvents = {
     listenHoldOneFinger: function(pElement, pLabelElement) {
@@ -62,6 +63,19 @@ MultitouchEvents = {
         }).addHandler(function(pEventType, pData, pFingers) {
             console.log("swipe filter off screen");
             exitFilterMenu(pElement);
+        });
+    },
+    /* select elements to create relationships */
+    listenHoldTwoFinger: function(pElement) {  
+        var finger = new Fingers(pElement);
+        finger.addGesture(Fingers.gesture.Hold, {
+            nbFingers: 2
+        }).addHandler(function(pEventType, pData, pFingers) {
+            RELATE = true; /*when user done relating - set to false */
+            console.log(pEventType, pData, pFingers);
+            Diagram.actionStarted("selectElementRelationship", elementsToBeRelated);
+            console.log("element selected to create relationship");
+            relateDiagramElements(pElement.id, pElement); 
         });
     },
 

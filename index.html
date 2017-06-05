@@ -21,12 +21,18 @@
     <script type="text/javascript" src="scripts/libs/canvas.text.js"></script>
     <script type="text/javascript" src="scripts/libs/jquery.min.js"></script>
     <script type="text/javascript" src="scripts/libs/dollar.js"></script>
+    <script type="text/javascript" src="scripts/libs/jquery-ui-1.10.4.custom.min.js"></script>
+    <script type="text/javascript" src="scripts/libs/jquery.connectingLine.js"></script>
     <script src="scripts/diagram.js"></script>
     <script src="scripts/canvas-logic.js"></script>
     <script src="scripts/multitouch.js"></script>
     <script type="text/javascript" src="scripts/gestureRecognizer.js"></script>
 </head>
 <body class="lock-screen" onload="onLoadEvent()"> <!-- start gesture recognition -->
+    <div class="relate">
+        <div class="header">Relate selected elements</div>
+    </div>
+
     <div class="toolbox">
         <div class="item" id="actor" data-action="insert"><img class="inner" src="img/actor.png"/></div>
         <div class="item" id="ellipse" data-action="insert"><img class="inner" src="img/ellipse.png"></div>
@@ -84,15 +90,106 @@
         </div>
     </div>
 
+    <!--
+    <div class="node1">Drag Me -associar</div>
+    <div class="node2" style="left: 528px; top: 80px;">Drag Me</div>
+
+    <div class="node3">Drag Me - extend</div>
+    <div class="node4" style="left: 528px; top: 80px;">Drag Me</div>
+
+    <div class="node5">Drag Me - include</div>
+    <div class="node6" style="left: 528px; top: 80px;">Drag Me</div>
+
+    <div class="node7">Drag Me - include</div>
+    <div class="node8" style="left: 528px; top: 80px;">Drag Me</div>-->
+
     <canvas id="myCanvas" width="2000px" height="2000px"
         oncontextmenu="return false;">
         <span style="background-color:#ffff88;">The &lt;canvas&gt; element is not supported by this browser.</span>
     </canvas>
 
+    <style>
+        .node1{
+            position:absolute;
+            width:100px;
+            background:#666;
+            color : #fff;
+            padding:10px;
+            cursor:pointer;
+            font-family:Georgia, "Times New Roman", Times, serif
+        }
+        .node2{
+            position:absolute;
+            width:100px;
+            background:#F99;
+            left: 300px;
+            padding:10px;
+            cursor:pointer;
+            font-family:Georgia, "Times New Roman", Times, serif
+        }
+
+        .node3{
+            position:absolute;
+            width:100px;
+            background:#666;
+            color : #fff;
+            padding:10px;
+            cursor:pointer;
+            font-family:Georgia, "Times New Roman", Times, serif
+        }
+        .node4{
+            position:absolute;
+            width:100px;
+            background:#F99;
+            left: 300px;
+            padding:10px;
+            cursor:pointer;
+            font-family:Georgia, "Times New Roman", Times, serif
+        }
+
+        .node5{
+            position:absolute;
+            width:100px;
+            background:#666;
+            color : #fff;
+            padding:10px;
+            cursor:pointer;
+            font-family:Georgia, "Times New Roman", Times, serif
+        }
+        .node6{
+            position:absolute;
+            width:100px;
+            background:#F99;
+            left: 300px;
+            padding:10px;
+            cursor:pointer;
+            font-family:Georgia, "Times New Roman", Times, serif
+        }
+
+        .node7{
+            position:absolute;
+            width:100px;
+            background:#666;
+            color : #fff;
+            padding:10px;
+            cursor:pointer;
+            font-family:Georgia, "Times New Roman", Times, serif
+        }
+        .node8{
+            position:absolute;
+            width:100px;
+            background:#F99;
+            left: 300px;
+            padding:10px;
+            cursor:pointer;
+            font-family:Georgia, "Times New Roman", Times, serif
+        }
+    </style>
 <script>
     var elementsToBeAdded = {};
     var elementsToBeRemoved = [];
     var selectedElements = [];
+    var elementsToBeRelated = [];
 
     document.body.style.webkitTouchCallout='none';
 
@@ -203,6 +300,15 @@
         },2000);
     }
 
+    function relateDiagramElements(elementId, element) {
+        if($.inArray(element, elementsToBeRelated) === -1) {
+            elementsToBeRelated.push(element);
+        }
+        //boundary
+        selectElement(element);
+        console.log(elementsToBeRelated); 
+    };
+
     function removeDiagramElements(elementId, element) {
         if($.inArray(element, elementsToBeRemoved) === -1) {
             elementsToBeRemoved.push(element);
@@ -269,6 +375,18 @@
           }
         });
         elementsToBeRemoved = [];
+    }
+
+    function cancelActionRelateElements(elements) {
+        elements.forEach(function(element){
+            deSelectElement(element);
+        });
+        elementsToBeRelated = [];
+        $('.relate').hide();
+    }
+
+    function showRelationshipPage() {
+        $('.relate').show();
     }
 
     var toolbox = document.getElementsByClassName("toolbox");

@@ -40,8 +40,22 @@ Diagram = {
           this.lastActionPerformed.name = "removeElements";
           this.lastActionPerformed.elements = removedElements;
           break;
+        case "selectElementRelationship":
+          showRelationshipPage();
+          Canvas.hideElementsNotSelected(this.action.elements);
+          this.actionStarted("showRelationshipPage", this.action.elements);
+          console.log("mudando pra pagina");
+          console.log(this.action);
+          break;
+        case "showRelationshipPage":
+          console.log("create relationships");
+          break;
       }
-      this.action = null;
+
+      if (this.action.name != "showRelationshipPage") {
+        this.action = null;
+      }
+      
       setTimeout(function() {
           $("#myCanvas").removeClass("confirm");
           _canvas.clearRect(0, 0, _rc.width, _rc.height);
@@ -61,7 +75,7 @@ Diagram = {
     var error = false;
 
     if (this.action || this.lastActionPerformed) {
-      if(!this.action || (this.action.name !== "selectElementRemove")) {
+      if(!this.action || (this.action.name !== "selectElementRemove" && this.action.name !== "selectElementRelationship")) {
         $("#myCanvas").addClass("undo");
 
         switch (this.lastActionPerformed.name) {
@@ -92,8 +106,9 @@ Diagram = {
       if (this.action) {
         switch (this.action.name) {
           case "selectElementRemove":
-          showErrorModal("You can't undo now, just confirm or cancel action");
-          break;
+          case "selectElementRelationship":
+            showErrorModal("You can't undo now, just confirm or cancel action");
+            break;
         }
       } else {
         showErrorModal("No action was performed");
@@ -112,7 +127,7 @@ Diagram = {
     console.log(this.action);
 
     if (this.action || this.lastActionPerformed) {
-      if (!this.action || (this.action.name !== "selectElementRemove")) {
+      if (!this.action || (this.action.name !== "selectElementRemove" && this.action.name !== "selectElementRelationship")) {
       
         $("#myCanvas").addClass("redo");
 
@@ -144,8 +159,9 @@ Diagram = {
       if (this.action) {
         switch (this.action.name) {
           case "selectElementRemove":
-          showErrorModal("You can't redo now, just confirm or cancel action");
-          break;
+          case "selectElementRelationship":
+            showErrorModal("You can't redo now, just confirm or cancel action");
+            break;
         }
       } else {
         showErrorModal("No action was performed");
@@ -169,6 +185,15 @@ Diagram = {
           REMOVE = false;
           showElementsLabels(this.action.elements);
           changeElImagesBackToOriginal(this.action.elements);
+          break;
+        case "selectElementRelationship":
+          RELATE = false;
+          cancelActionRelateElements(this.action.elements);
+          break;
+        case "showRelationshipPage":
+          RELATE = false;
+          Canvas.showAllElements();
+          cancelActionRelateElements(this.action.elements);
           break;
       }
 

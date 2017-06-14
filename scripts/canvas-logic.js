@@ -207,12 +207,18 @@ Canvas = {
             style: type
         });
         
+        //save relation drawn object
+        temporaryRelationships.push(mySVG);
         $(elements.first).on("touchmove", function(event, ui){
             mySVG.redrawLines();
         });
         $(elements.second).on("touchmove", function(event, ui){
             mySVG.redrawLines();
         });
+    },
+
+    removeTempRelationsships : function() {
+        temporaryRelationships = [];
     }
 }
 

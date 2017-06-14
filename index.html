@@ -377,7 +377,9 @@
     function cancelActionRelateElements(elements) {
         elements.forEach(function(element){
             deSelectElement(element);
+            $(element).unbind("touchmove");
         });
+        Canvas.removeTempRelationsships();
         elementsToBeRelated = [];
         $('.relate').hide();
     }

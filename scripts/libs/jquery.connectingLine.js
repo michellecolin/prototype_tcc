@@ -5,7 +5,6 @@
 
 (function($) {
 	$.fn.connect = function(param) {
-
 		var _canvas;
 		var _ctx;
 		var _lines = new Array(); //This array will store all lines (option)
@@ -14,7 +13,6 @@
 
 		//Initialize Canvas object
 		_canvas = document.getElementById('myCanvas');
-		console.log(_canvas);
 
 		this.drawLine = function(option) {
 			//It will push line to array.
@@ -110,79 +108,103 @@
 							break;
 					}
 
+					
+					_left_node = $(option.left_node); //first
+					_right_node = $(option.right_node); //second
+					var sidesInverted = false;
+
 					//If left_node is actually right side, following code will switch elements.
-					//$(option.right_node).each(function(index, value) {
-						_left_node = $(option.left_node); //first
-						_right_node = $(option.right_node); //second
-						/*if (_left_node.offset().left >= _right_node.offset().left) {
-							_tmp = _left_node
-							_left_node = _right_node
-							_right_node = _tmp;
-						}*/
+					if (_left_node.offset().left >= _right_node.offset().left) {
+						sidesInverted = true;
+						_tmp = _left_node
+						_left_node = _right_node
+						_right_node = _tmp;
+					}
 
+					var verticalDifference = Math.abs(_left_node.offset().top - _right_node.offset().top);
+					var horizontalDifference = Math.abs(_left_node.offset().left - _right_node.offset().left);
+					var orientation;
+					if (verticalDifference > horizontalDifference){
+						orientation = "vertical";
+					} else {
+						orientation = "horizontal";
+					}
+					var verticalSign = _left_node.offset().top - _right_node.offset().top;
+					var horizontalSign = _left_node.offset().left - _right_node.offset().left;
+
+					if (orientation == "horizontal") {
 						//Get Left point and Right Point
-						console.log("first element offset");
-						console.log(_left_node.offset());
-						console.log(_left_node.outerWidth());
-						_left.x = (_left_node.offset().left + _left_node.outerWidth());
-						console.log(_left.x);
-						console.log("-----------------");
-						_left.y = (_left_node.offset().top + (_left_node.outerHeight() / 2) -50);
-						console.log(_left_node.offset().top); 
-						console.log(_left_node.outerWidth());
+						_left.x = (_left_node.offset().left + _left_node.outerWidth()) - 10;
+						_left.y = (_left_node.offset().top + (_left_node.outerHeight() / 2) -100);
 						//offset top - altura do elemento
-						_right.x = _right_node.offset().left;
-						console.log(_right_node.offset().top);
-						console.log(_right_node.outerWidth());
-						_right.y = (_right_node.offset().top + (_right_node.outerHeight() / 2) -50);
-
-						//Create a group
-						//var g = _canvas.group({strokeWidth: 2, strokeDashArray:_dash}); 	
-
-						//Draw Line
-						var _gap = option.horizantal_gap || 0;
-
-
-						_ctx.moveTo(_left.x, _left.y);
-
-						if (_gap != 0) {
-							_ctx.lineTo(_left.x + _gap, _left.y);
-							_ctx.lineTo(_right.x - _gap, _right.y);
-						}
-						_ctx.lineTo(_right.x, _right.y);
-						
-
-						if (!_ctx.setLineDash) {
-							_ctx.setLineDash = function() {}
-						} else {
-							_ctx.setLineDash(_dash);
-						}
-						_ctx.lineWidth = option.width || 2;
-						_ctx.strokeStyle = _color;
-						var line = _ctx.stroke();
-
-						if (option.style != "Association") {
-							_ctx.font = "15px Arial";
-
-							if (option.style != "Generalization") {
-								_ctx.fillText("<<"+ option.style +">>", (_left.x +_right.x)/2 ,(_left.y + _right.y)/2);
+						_right.x = _right_node.offset().left + 10;
+						_right.y = (_right_node.offset().top + (_right_node.outerHeight() / 2) -100);
+					} else { //vertical
+						if (verticalSign < 0) {
+							if (!sidesInverted) { // below
+								_left.x = (_left_node.offset().left + (_left_node.outerWidth() /2));
+								_left.y = _left_node.offset().top;
+								_right.x = (_right_node.offset().left + (_right_node.outerWidth() /2));
+								_right.y = (_right_node.offset().top - _right_node.outerHeight()) + 50;
+							} else { //above
+								_right.x = (_right_node.offset().left + (_right_node.outerWidth() /2));
+								_right.y = (_right_node.offset().top - _right_node.outerHeight()) + 50;
+								_left.x = (_left_node.offset().left + (_left_node.outerWidth() /2));
+								_left.y = _left_node.offset().top + (_left_node.outerWidth() /2) - 60;
 							}
-							 // draw the starting arrowhead
-							 if (option.style == "Include" || option.style == "Generalization") {
-						 		 	var startRadians=Math.atan((_right.y-_left.y)/(_right.x-_left.x));
-			            console.log(startRadians);
-			            startRadians+=((_right.x>_left.x)?-90:90)*Math.PI/180;
-			            drawArrowhead(_ctx,_left.x , _left.y,startRadians);
-							 } else if (option.style == "Extend") {
-							 	 // draw the ending arrowhead
-		          	var endRadians=Math.atan((_left.y-_right.y)/(_left.x-_right.x));
-		            endRadians+=((_right.x>_left.x)?90:-90)*Math.PI/180;
-		            drawArrowhead(_ctx,_right.x, _right.y, endRadians);
-							 }
+						} else {
+							if (!sidesInverted) { //above
+								_left.x = (_left_node.offset().left + (_left_node.outerWidth() /2));
+								_left.y = _left_node.offset().top;
+								_right.x = (_right_node.offset().left + (_right_node.outerWidth() /2));
+								_right.y = _right_node.offset().top + (_right_node.outerWidth() /2) - 60;
+							} else { //below
+								_left.x = (_left_node.offset().left + (_left_node.outerWidth() /2));
+								_left.y = (_left_node.offset().top - _left_node.outerHeight()) + 50;
+								_right.x = (_right_node.offset().left + (_right_node.outerWidth() /2));
+								_right.y = _right_node.offset().top;
+							}
 						}
+					}
 
-					//});
+					//Draw Line
+					var _gap = option.horizantal_gap || 0;
+					_ctx.moveTo(_left.x, _left.y);
 
+					if (_gap != 0) {
+						_ctx.lineTo(_left.x + _gap, _left.y);
+						_ctx.lineTo(_right.x - _gap, _right.y);
+					}
+					_ctx.lineTo(_right.x, _right.y);
+
+					if (!_ctx.setLineDash) {
+						_ctx.setLineDash = function() {}
+					} else {
+						_ctx.setLineDash(_dash);
+					}
+					_ctx.lineWidth = option.width || 2;
+					_ctx.strokeStyle = _color;
+					var line = _ctx.stroke();
+
+					if (option.style != "Association") {
+						_ctx.font = "15px Arial";
+
+						if (option.style != "Generalization") {
+							_ctx.fillText("<<"+ option.style +">>", (_left.x +_right.x)/2 ,(_left.y + _right.y)/2);
+						}
+						 // draw the starting arrowhead
+						if (sidesInverted && (option.style == "Extend" || option.style == "Include" || option.style == "Generalization")) {
+						 	var startRadians=Math.atan((_right.y-_left.y)/(_right.x-_left.x));
+						  startRadians+=((_right.x>_left.x)?-90:90)*Math.PI/180;
+						  drawArrowhead(_ctx,_left.x , _left.y,startRadians);
+						}
+						else if (!sidesInverted && (option.style == "Extend" || option.style == "Include" || option.style == "Generalization")) {
+							 // draw the ending arrowhead
+							var endRadians=Math.atan((_left.y-_right.y)/(_left.x-_right.x));
+							endRadians+=((_right.x>_left.x)?90:-90)*Math.PI/180;
+							drawArrowhead(_ctx,_right.x, _right.y, endRadians);
+						}
+					}
 					//option.resize = option.resize || false;
 				} else {
 					if (_error) alert('Mandatory Fields are missing or incorrect');

@@ -19,6 +19,21 @@
 			_lines.push(option);
 			this.connect(option);
 		};
+
+		this.removeLines = function(elements) {
+			for (var i = 0; i < elements.length; i++) {
+				_lines.pop();
+			}
+		};
+
+		this.addLines = function(elements) {
+			console.log("add lines");
+			elements.forEach(function(el) {
+				_lines.push(el);
+			});
+      console.log(_lines);
+		};
+
 		this.drawAllLine = function(option) {
 
 			/*Mandatory Fields------------------

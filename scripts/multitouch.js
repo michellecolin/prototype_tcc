@@ -24,8 +24,6 @@ MultitouchEvents = {
         }).addHandler(function(pEventType, pData, pFingers) {
             if (pData.nbTap === 2) {
                 FILTER = true; 
-                console.log(FILTER);
-                console.log("element selected to be filtered");
                 Diagram.actionStarted("filterElement", pElement);
                 filterElement(pElement);
             }
@@ -42,9 +40,7 @@ MultitouchEvents = {
                 REMOVE = true;
                 $(".edit-menu").css('display', 'none');
                 setTimeout(function() {
-                    console.log(FILTER);
                     if (!FILTER && !RELATE) {
-                        console.log("element selected to be deleted");
                         Diagram.actionStarted("selectElementRemove", elementsToBeRemoved);
                         removeDiagramElements(pElement.id, pElement); 
                     } else {
@@ -61,7 +57,6 @@ MultitouchEvents = {
         finger.addGesture(Fingers.gesture.Swipe, {
             nbFingers: 2
         }).addHandler(function(pEventType, pData, pFingers) {
-            console.log("swipe filter off screen");
             exitFilterMenu(pElement);
         });
     },
@@ -72,18 +67,15 @@ MultitouchEvents = {
             nbFingers: 2
         }).addHandler(function(pEventType, pData, pFingers) {
             RELATE = true; /*when user done relating - set to false */
-            console.log(pEventType, pData, pFingers);
             if (Diagram.action) {
                 if (Diagram.action.name == "showRelationshipPage") {
                     selectDiagramToRelate(pElement.id, pElement);
                 } else {
                     Diagram.actionStarted("selectElementRelationship", elementsToBeRelated);
-                    console.log("element selected to create relationship");
                     relateDiagramElements(pElement.id, pElement); 
                 }
             } else {
                 Diagram.actionStarted("selectElementRelationship", elementsToBeRelated);
-                console.log("element selected to create relationship");
                 relateDiagramElements(pElement.id, pElement); 
             }
         });
@@ -93,8 +85,6 @@ MultitouchEvents = {
         finger.addGesture(Fingers.gesture.Tap, {
             nbFingers: 1
         }).addHandler(function(pEventType, pData, pFingers) {
-            console.log("li");
-            console.log(pElement);
             pElement.style.backgroundColor = "#327966";
             setTimeout(function(){
                 pElement.style.backgroundColor = "#25a985";
@@ -110,16 +100,10 @@ MultitouchEvents = {
             nbFingers: 1
         }).addHandler(function(pEventType, pData, pFingers) {
             setTimeout(function(){
-                console.log("one tap");
-                console.log(REMOVE);
                 if (!REMOVE && !FILTER) {
                     if (pData.nbTap === 1) {
-
                         if (RELATE) {
-                            console.log("relate");
                         } else {
-                            console.log("edit name");
-                            console.log(pElement);
                             $(".edit-menu").css('display', 'table');
                             $(".content").find("input").val($("#"+ pElement.id).find('div').html());
 

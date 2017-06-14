@@ -303,7 +303,6 @@
         }
         //boundary
         selectElement(element);
-        console.log(elementsToBeRelated); 
     };
 
     function removeDiagramElements(elementId, element) {
@@ -318,8 +317,6 @@
 
         $("#"+ elementId).find('img').attr('src', imgsrc);
         $("#"+ elementId).find('div').css('display', 'none');
-
-        console.log(elementsToBeRemoved); 
     };
 
     function showElementsLabels(elements) {
@@ -329,7 +326,6 @@
     }
 
     function filterElement(element) {
-        console.log(element);
         selectedElements.push(element);
         selectElement(element);
         $(".element-filter").html($("#"+ element.id).find('div').html());
@@ -375,11 +371,16 @@
     }
 
     function cancelActionRelateElements(elements) {
-        elements.forEach(function(element){
+        elements.forEach(function(element) {
             deSelectElement(element);
             $(element).unbind("touchmove");
         });
         Canvas.removeTempRelationsships();
+        elementsToBeRelated = [];
+        $('.relate').hide();
+    }
+
+    function confirmRelationsCreated() {
         elementsToBeRelated = [];
         $('.relate').hide();
     }
@@ -401,8 +402,18 @@
             twoElementsRelationship.first = element;
         }
         selectElement(element);
-        console.log("lalala");
-        console.log(twoElementsRelationship);
+    }
+
+    function freeToOtherRelationships(deselect) {
+        if (deselect) {
+            if ( twoElementsRelationship.first ) {
+                 deSelectElement(twoElementsRelationship.first);
+            }
+            if ( twoElementsRelationship.second ) {
+                deSelectElement(twoElementsRelationship.second);
+            }
+        }
+        twoElementsRelationship = {};
     }
 
     var toolbox = document.getElementsByClassName("toolbox");

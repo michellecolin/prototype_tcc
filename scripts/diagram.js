@@ -19,7 +19,7 @@ Diagram = {
   confirmAction: function() {
     _canvas = this.unistrokeCanvas; //binding problem on setTimeout
     _rc = this.unistrokeCanvasRect;
-
+    var empty = false;
     if (this.action) {
       $("#myCanvas").addClass("confirm");
 
@@ -41,21 +41,27 @@ Diagram = {
           this.lastActionPerformed.elements = removedElements;
           break;
         case "selectElementRelationship":
+          Canvas.stopFixedSvg();
           showRelationshipPage();
+          RELATEPAGE = true;
           Canvas.hideElementsNotSelected(this.action.elements);
           this.actionStarted("showRelationshipPage", this.action.elements);
           this.action.elements.forEach(function(el){
             deSelectElement(el);
           });
-          console.log("mudando pra pagina");
-          console.log(this.action);
           break;
         case "showRelationshipPage":
-          console.log("create relationships");
+          RELATE = false;
+          Canvas.saveRelationships();
+          this.lastActionPerformed.name = "createRelationships";
+          this.lastActionPerformed.elements = Canvas.relationships;
+          Canvas.showAllElements();
+          confirmRelationsCreated();
+          empty = true;
           break;
       }
 
-      if (this.action.name != "showRelationshipPage") {
+      if (this.action.name != "showRelationshipPage" || empty) {
         this.action = null;
       }
       
@@ -70,9 +76,6 @@ Diagram = {
   }, 
 
   undoAction: function() {
-    console.log("undo");
-    console.log(this.lastActionPerformed);
-    console.log(this.action);
     _canvas = this.unistrokeCanvas; //binding problem on setTimeout
     _rc = this.unistrokeCanvasRect;
     var error = false;
@@ -91,6 +94,9 @@ Diagram = {
             showElementsLabels(this.lastActionPerformed.elements);
             this.lastActionPerformed.name = "insert";
             break;
+          case "createRelationships":
+            Canvas.svg.removeLines(this.lastActionPerformed.elements);
+            this.lastActionPerformed.name = "removeRelationships";
         }
 
         this.action = null;
@@ -125,10 +131,6 @@ Diagram = {
     _rc = this.unistrokeCanvasRect;
     var error = false;
 
-    console.log("REDO");
-    console.log(this.lastActionPerformed);
-    console.log(this.action);
-
     if (this.action || this.lastActionPerformed) {
       if (!this.action || (this.action.name !== "selectElementRemove" && this.action.name !== "selectElementRelationship")) {
       
@@ -144,6 +146,10 @@ Diagram = {
             Canvas.removeElements(this.lastActionPerformed.elements); 
             this.lastActionPerformed.name = "removeElements";
             break;
+
+          case "removeRelationships":
+            Canvas.svg.addLines(this.lastActionPerformed.elements);
+            this.lastActionPerformed.name = "createRelationships";
         }
 
         this.action = null;

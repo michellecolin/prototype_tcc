@@ -165,6 +165,8 @@ Canvas = {
         elements.forEach(function(el){
             for (var i = 0; i < boxList.length; i++) {
                 if (boxList[i].id == el.id) {
+                    boxList[i].deleted = true;
+                    console.log(boxList[i]);
                     boxList[i].element.style.display = 'none'; //pog
                     removedEl.push(boxList[i]);
                 }
@@ -190,7 +192,9 @@ Canvas = {
 
     showAllElements: function(element) {
         for (var i = 0; i < boxList.length; i++) {
-            boxList[i].element.style.display = 'block';
+            if (!boxList[i].deleted) {
+                boxList[i].element.style.display = 'block';
+            }
         }
     },
 
@@ -198,6 +202,7 @@ Canvas = {
         elements.forEach(function(el){
             for (var i = 0; i < boxList.length; i++) {
                 if (boxList[i].id == el.id) {
+                    boxList[i].deleted = false;
                     boxList[i].element.style.display = 'block'; //pog
                     boxList[i].element.style.display = 'block';
                 }

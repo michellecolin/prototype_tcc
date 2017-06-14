@@ -26,8 +26,27 @@
 			}
 		};
 
+		this.removeElementsRemoved = function(elements) {
+			var elementsRemoved = [];
+			var indexes = [];
+
+			elements.forEach(function(el) {
+				for (var i = 0; i < _lines.length; i++) {
+					if( el.element == _lines[i].left_node || el.element == _lines[i].right_node) {
+						indexes.push(i);
+						elementsRemoved.push(_lines[i]);
+					}
+				}
+			});
+
+			var i = indexes.length;
+			while (i--) {
+        _lines.splice(i,1);
+			}   
+			return elementsRemoved;
+		};
+
 		this.addLines = function(elements) {
-			console.log("add lines");
 			elements.forEach(function(el) {
 				_lines.push(el);
 			});

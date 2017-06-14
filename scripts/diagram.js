@@ -39,6 +39,7 @@ Diagram = {
           changeElImagesBackToOriginal(this.action.elements);
           this.lastActionPerformed.name = "removeElements";
           this.lastActionPerformed.elements = removedElements;
+          this.lastActionPerformed.lines = Canvas.svg.removeElementsRemoved(removedElements);
           break;
         case "selectElementRelationship":
           Canvas.stopFixedSvg();
@@ -92,6 +93,7 @@ Diagram = {
           case "removeElements":
             Canvas.readdElements(this.lastActionPerformed.elements); 
             showElementsLabels(this.lastActionPerformed.elements);
+            Canvas.svg.addLines(this.lastActionPerformed.lines);
             this.lastActionPerformed.name = "insert";
             break;
           case "createRelationships":
@@ -139,11 +141,17 @@ Diagram = {
         switch (this.lastActionPerformed.name) {
           case "removeElements":
             Canvas.readdElements(this.lastActionPerformed.elements); 
+            if (Canvas.svg) {
+              this.lastActionPerformed.lines = Canvas.svg.removeElementsRemoved(this.lastActionPerformed.elements);
+            }
             this.lastActionPerformed.name = "insert";
             break;
 
           case "insert":
-            Canvas.removeElements(this.lastActionPerformed.elements); 
+            Canvas.removeElements(this.lastActionPerformed.elements);
+            if (Canvas.svg) {
+              this.lastActionPerformed.lines = Canvas.svg.removeLines(this.lastActionPerformed.lines); 
+            }
             this.lastActionPerformed.name = "removeElements";
             break;
 
